@@ -1,0 +1,388 @@
+XPath
++How to Find XPath in Chrome browser for Selenium Webdriver 
++Learn how to verify Custom XPath in Chrome Browser 
++Create and Test your own XPath before using it in Script 
++Learn how quickly - you can create custom XPath 
++Learn the concept of : parent, preceding-sibling, forward-sibling Xpaths in Selenium 
++Learn text(), contains() functions in XPath 
++handling dynamic elements in selenium webdriver 
++how to write xpath in selenium webdriver 
++how to write relative xpath in selenium 
++dynamic xpath in selenium using different approaches 
++absolute xpath in selenium 
++how to write xpath manually in selenium webdriver 
++how to write absolute xpath in selenium selenium xpath java ====================================================== Some Good Examples: ++link: Features 1. //a[text()='Features'] 2. //a[contains(text(),'Features')] --recommended 
+++button: //button[@type='button' and @class='btn'] //button[contains(text(),'Sign Up')] //div[@class='dropdown']//button[@type='button' and @class='btn btn-secondary dropdown-toggle' and @id='dropdownMenuButton'] //button[@id='dropdownMenuButton'] 
+++preceding-sibling: //a[text()='test2 test2']//parent::td[@class='datalistrow']//preceding-sibling::td[@class='datalistrow']//input 
+++parent & preceding-sibling: //a[text()='test2 test2']//parent::td[@class='datalistrow']//preceding-sibling::td[@class='datalistrow']//input[@name='contact_id'] ======================================================
+
+Locators supported by Selenium WebDriver
+ID
+Name
+ClassName
+Linktext
+Xpath
+//TagName[@attribute = ‘Value’]
+//input[@id=”username”]
+
+CSSelector
+
+Misconceptions reg locators:
+Evey object may not have ID, className or name- Xpath and CSS Preferred
+Alpha numeric id may vary on every refresh- check
+Confirm the link object with anchor "a" tag
+Classes should not have spaces- Compound classes cannot be accepted
+Multipl values - Selenium identifies the first one- Scans from top left
+Double quotes inside double quotes are not accepted
+Xpath/CSS  can be defined in n number of ways
+Rightclick copy on blue highlighted html code to generate xpath
+Firepath depreciated from firefox- 
+when xpath starts with html-Not reliable- Switch browser to get another one
+There is no direct way to get CSS in chrome. You will find it in tool bar
+Degrade browser to less firefox 55 to ge Firepath
+$("") - for css ,    $x("")   or xpath
+//tagName[@attribute='value']  - xpath syntax
+tagName[attribute='value']  -CSS  tagName#id- CSS   tagname.classname- CSS
+//tagName[contains(@attribute,'value')]  - xpath regular expression
+//tagName[starts-with(@attribute,'value')]  - xpath regular expression
+
+//tagName[ends-with(@attribute,'value')]  - xpath regular expression
+
+tagName[Atrribute*='value'] - Css regular expression
+Parent Child relation ship xpath – Define xpath parent/tagnames
+Traversing from sibling to sibling – following-sibling::tagname[count]
+Traversing from child to parent ? //tagName[@attribute='value']/parent::tagname  
+Least option – based on the visible test - //*[text()='Images']
+
+
+
+Use # to comment a line in a config.properties file.
+
+
+What is the difference between Relative and absolute xpath?
+Relative- Doesnot depend on parent nodes 
+Parent/child- Absolute xpath –
+
+ How to traverse to sibling element using xpath?
+.//*[@id='tablist1-tab1']/following-sibling::li[2]
+How to traverse back to Parent element from Child element using Xpath?
+.//*[@id='tablist1-tab1']/parent::ul	
+ How to identify element with Text based?
+
+Advantages of HtmlUnitDriver
+Testing is happening behind the scenes without launching the browser. Its called as ghost browser or headless browser
+
+HtmlUnitDriver is not part of selenium and need to download and add to the external JARs
+
++Test execution using HtmlUnitDriver is very fast. Since it is the fastest implementation of Selenium WebDriver. 
++Being headless and fast, it is an ideal choice for web scrapping. 
++Its browser - htmlUnit is Java based. Hence, it is platform independent. 
++It also supports JavaScript execution through in-built Rhino javascript engine. 
+
+
+Difference between isDisplayed(), isEnabled() and isSelected() Methods in Selenium WebDriver:
+1. isDisplayed() is the method used to verify the presence of a web element within the web page. The method returns a “true” value if the specified web element is present on the web page and a “false” value if the web element is not present on the webpage. 
+2. isDisplayed() is capable to check for the presence of all kinds of web elements available. 
+3. isEnabled() is the method used to verify if the web element is enabled or disabled within the web page. 
+4. isEnabled() is primarily used with buttons. 
+5. isSelected() is the method used to verify if the web element is selected or not. 
+6. isSelected() method is predominantly used with radio buttons, dropdowns and checkboxes. 
+
+ 
+
+To download Selenium JARs https://www.seleniumhq.org/download/
+GIT Setup:
+1.	Create a GIT repository
+2.	Goto command prompt and CD to project directory
+3.	GIT INIT  ?to register.(Dir /a:h to see the hidden files)
+4.	GIT Status
+5.	GIT add .
+6.	GIT Status
+7.	git config user.email "insert github email here"
+git config user.name "insert github real name here"
+
+OR 
+Generate the SSH key
+
+8.	GIT commit –m “comments”
+9.	$ git remote add origin https://github.com/orkay5126/NewDemo.git
+10.	GIT push –u origin master
+To Clone (fresh copy) – Pull (sub sequent)
+1.	GIT clone <GIT url> <Where to clone>
+2.	git checkout -b testbranch1
+3.	GIT Status
+4.	<update your changes>
+5.	GIT add .
+6.	GIT Status
+7.	GIT commit –m “comments”
+8.	GIT push –u origin <branchname>
+To Pull and Merge:
+1.	Git checkout master
+2.	GIT pull origin master
+3.	Git branch –merged
+4.	Git merge <branch name>
+5.	mvn clean install....to make sure that there is no build issues
+6.	Git push origin master
+Delete a branch:
+1.	Git branch –d <branch name> //deleting from local repository
+2.	Git branch –a
+3.	Git push origin –delete <branch name>   //deleting from remote repository
+Other commonds:
+GIT Log
+GIT reflog
+GIT Show
+GIT log –h5
+GIT reset –hp
+Git push –h
+Git <verb> --help
+Ls -la
+Gitk? Open the application in UI
+git remote –v
+git branch -a
+git diff
+git rebase
+
+
+git clone
+updates
+status
+git add <file names>
+status
+commit -m "commnets"
+push <branch name>
+
+
+
+GIT Cheat Sheet: https://gist.github.com/davfre/8313299
+GIT Basics : https://www.youtube.com/watch?v=HVsySz-h9r4
+SSH Key generation process:
+1.	ssh-keygen -t rsa
+2.	start the ssh-agent in the background
+eval $(ssh-agent -s) 
+3.	To list the available ssh files
+ls -al ~/.ssh
+4.	# Copies the contents of the id_rsa.pub file to your clipboard 
+clip < ~/.ssh/id_rsa.pub 
+
+
+$ cat ~/.ssh/id_rsa.pub	? To view the file 
+ls -al ~/.ssh   ?# Lists the files in your .ssh directory, if they exist
+
+https://docs.joyent.com/public-cloud/getting-started/ssh-keys/generating-an-ssh-key-manually/manually-generating-your-ssh-key-in-windows
+https://www.ssh.com/ssh/keygen/#sec-SSH-Keys-and-Public-Key-Authentication
+https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+
+ To launch Safari browser, no need to use the “SetProperty”. Need to add an extension in Safari.
+1.	Goto Preferences?Extensions and add the Safari Extension for Selenium
+2.	Goto Preferences?Advanced settings?check “Show Develop in menu bar ” ?Click on Develop Tab?Check “Allow Remote Automation”
+How to launch Safari Browser with Selenium: Steps: 
+1 – Set Up WebDriver Extension for Safari browser 
+2 -- Install the Safari Browser Extension 
+3 -- Restart your Safari Browser 
+4 -- Enable "Allow Remote Automation" option from Develop tab 
+5 -- Run your script
+
+//Alert 
+Alert alert = driver.switchTo().alert();
+System.out.println(alert.getText());
+alert.accept();
+alert.dismiss();
+
+//Frame
+driver.switchTo().frame(frmaeid);
+
+//drag and drop
+Actions a = new Actions(driver);
+a.clickAndHold(driver.findElement(By.xpath(""))).moveToElement(driver.findElement(By.xpath(""))).release().build().perform();
+
+//xpath
+driver.findElement(By.xpath("//input[contains(@id, 'Test')]")).sendKeys("Text");
+driver.findElement(By.xpath("//input[starts-with(@id, 'Test')]")).sendKeys("Text");
+driver.findElement(By.xpath("//input[ends-with(@id, 'Test')]")).sendKeys("Text");
+All the links are represented by <a>html tag
+driver.findElement(By.xpath("//a[contains(Text(), 'Test')]")).click();
+To get all the links
+List <WebElement> links = driver.findElements(By.tagName("a")));
+
+
+What is HTML DOM - Document Object Model? Why we get StaleElement Exception in Selenium.
+• DOM is an API Interface provided by browser 
+• When a web page is loaded, browser creates a DOM of the page. 
+
+What are the different Exceptions in Selenium: 
+a. StaleElement Exception 
+b. ElementNotFound Exception 
+c. NoElementReference Exception
+
+With the document object model, JavaScript gets all the power it needs to create dynamic HTML:
+• JavaScript can change all the HTML elements in the page 
+• JavaScript can change all the HTML attributes in the page 
+• JavaScript can change all the CSS styles in the page 
+• JavaScript can remove existing HTML elements and attributes 
+• JavaScript can add new HTML elements and attributes 
+• JavaScript can react to all existing HTML events in the page 
+• JavaScript can create new HTML events in the page
+
+
+Jenkins :
+Install Jenkins
+https://www.tutorialspoint.com/jenkins/jenkins_maven_setup.htm
+
+Open the command prompt. From the command prompt, browse to the directory where the jenkins.war file is present. 
+D:\>Java –jar Jenkins.war
+
+http://localhost:8080
+
+configure:
+Manage Jenkins?Manage Plug ins
+click on Available Tab,
+In the filter box enter "Maven plugin" and you will get search result as "Unleash Maven Plugin",
+v enable the check-box, click on "Download now and install after restart"
+
+Configure Systems?
+
+How to setup Jenkins on Windows
+Step 1 : Download Jenkins war file - https://jenkins.io/
+Step 2 : Place the war file into any location on your system
+Step 3 : goto command prompt (windows) | terminal (mac)
+   - goto folder where jenkins.war is
+   - java -jar jenkins.war
+Step 4 : goto browser - http://localhost:8080 (Jenkins window should show up)
+Step 5 : install required plugins
+Step 6 : get started with Jenkins
+
+How to setup Jenkins on Tomcat
+Step 1 : Download Tomcat 
+Step 2 : Unzip and place tomcat folder at any location
+Step 3 : Copy/Place the jenkins.war file inside tomcat/webapps folder
+Step 4 : Goto commandpromt (cmd) - windows  |  terminal - mac
+  - goto tomcat/bin directory
+  - make all files executable : chmod +x *.sh
+
+In case of windows this command will not work. This step might not be needed if you are on windows. Else you can right click on the file/folder goto security tab and change the permissions.
+
+Can watch -   
+TOMCAT - How to install and run on Windows | Change Port | Run app
+https://youtu.be/ZIIkrn6LHW0?list=PLh...
+
+Step 5 : Start Tomcat : ./startup.sh
+  (to shutdown tomcat : ./shutdown.sh)
+Step 6 : verify if tomcat started : browser - http://localhost:8080
+
+Step 7 : verify if jenkins is running on tomcat : http://localhost:8080/jenkins
+
+*** To start jenkins (standalone) on a diff port***
+java -jar jenkins.war - - httpPort=9090
+
+
+How to change Home Directory
+Jenkins Home Directory contains:
+1. All configurations
+2. Plugins
+3. Jobs details
+4. Logs
+
+Why:
+-To move jenkins home dir to a location that has enough disk space
+-Project requirements
+
+If you have installed jenkins on windows through msi file then read this - http://tech.nitoyon.com/en/blog/2014/...
+
+Step 1 : Check your current home directory
+
+Step 2 : Create a new folder (which will be new home dir)
+
+Step 3 : Copy all data from old dir to new dir
+
+Step 4 : change env variable - JENKINS_HOME and set to new dir
+    Windows - change env variable
+   Mac - goto terminaal
+ export JENKINS_HOME=/Users/raghav/Desktop/Tools/Jenkins/JenkinsHome/
+
+Step 5 : restart Jenkins
+
+____________________________________________________________
+
+To see hidden files/folders on mac:
+1. Exit Finder
+2. On terminal - defaults write com.apple.finder AppleShowAllFiles TRUE
+3. Press option/alt - right click finder - relaunch
+ 
+
+How to use CLI - command line interface
+Step 1 : start Jenkins
+Step 2 : goto Manage Jenkins - Configure Global Security - enable security
+Step 3 : goto - http://localhost:8080/cli/
+Step 4 : download jerkins-cli jar. Place at any location.
+Step 5 : test the jenkins command line is working
+
+
+How to install and run on Windows | Change Port | Run app
+Step 1 : Download Tomcat
+
+Step 2 : Unzip tomcat folder and place at any location
+
+Step 3 : Start Tomcat
+   A. Goto Tomcat/bin - click on startup.bat or startup.sh
+   B. Goto cmd - Tomcat/bin  - startup.bat or startup.sh
+   C. Goto cmd - Tomcat/bin  - catalina.bat start
+
+Step 4 : Start Tomcat
+   A. Goto Tomcat/bin - click on shutdown.bat or shutdown.sh
+   B. Goto cmd - Tomcat/bin  - shutdown.bat or shutdown.sh
+   C. Goto cmd - Tomcat/bin  - catalina.bat stop
+
+Step 5 : How to change default port 8080
+   - Goto Tomcat - Conf
+   - Edit server.xml
+   - Change port number at connector port
+   - save and restart tomcat
+
+Step 6 : How to run application on tomcat
+   - place .war file inside Tomcat/ web apps
+   - restart tomcat
+
+Surefire plug in
+<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.0</version>
+        <configuration>
+          <includes>
+            <include>Sample.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+building and run java program by using maven
+http://www.oracle.com/webfolder/technetwork/tutorials/obe/java/Maven_SE/Maven.html
+
+https://www.mkyong.com/maven/how-to-install-maven-in-windows/
+
+
+
+Oracle Virtual Box/Vagrant:
+https://drupalize.me/videos/installing-vagrant-and-virtualbox?p=1526
+
+VI commands:
+:q! – Quit without saving
+:q – Quit
+:w - save
+:wq – Save and Quit
+DD – to cut the line(For multiple lines, <# of lines>DD)
+DW – To cut the word
+YY – To copy the line(For multiple lines, <# of lines>YY)
+YW - To copy the word
+P – Paste
+GREP
+/<Search Item> - to search; n -search forward; N – search backwards
+r – Replace the character one at a time
+R – replace the char until Esc hit
+u – Undi
+Ctl + R  - Redo
+X – Delete right char; x – delete left char
+H ?; L?; J- Down;K-UP;
+
