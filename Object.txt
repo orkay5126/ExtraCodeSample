@@ -1,0 +1,1434 @@
+package com.ObjectRepository;
+
+import java.awt.AWTException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.resources.FunctionalLibrary;
+import com.resources.ReadDatafromExcel;
+import com.stepdefinition.TestRunner1;
+
+public class AccountReceivable extends FunctionalLibrary {
+
+	@FindBy(id = "create-account-lnk")
+	private WebElement lnkCreateAnAccount;
+
+	@FindBy(className = "spark-table")
+	private WebElement tblHeader;
+
+	@FindBy(name = "arAccountName")
+	private WebElement txtAccountName;
+
+	@FindBy(name = "contactFirstName")
+	private WebElement txtFirstName;
+
+	@FindBy(name = "contactLastName")
+	private WebElement txtLastName;
+
+	@FindBy(name = "phoneNumber0")
+	private WebElement txtPhoneNumber;
+
+	@FindBy(className = "btn-group-primary")
+	private WebElement btnAdd;
+
+	@FindBy(className = "spark-create-account-receivable-modal")
+	private WebElement sectionAdd;
+
+	@FindBy(name = "preferredLangId")
+	private WebElement ddnPreferredLanguage;
+	
+
+	@FindBy(name = "contactEmail")
+	private WebElement txtEmail;
+
+	@FindBy(name = "contactWebsite")
+	private WebElement txtWebsite;
+
+	@FindBy(xpath = "//select[contains(@name,'phoneType')]")
+	private List<WebElement> ddnPhoneType;
+
+	@FindBy(xpath = "//input[contains(@name,'phoneNumber')]")
+	private List<WebElement> txtPhoneNumbers;
+	
+	@FindBy(xpath = "//input[contains(@name,'phoneNumber1')]")
+	private WebElement txtPhoneNumber2;
+	
+	@FindBy(xpath = "//input[contains(@name,'phoneExtn1')]")
+	private WebElement txtPhoneExtn2;
+
+	@FindBy(xpath = "//input[contains(@name,'phoneExtn')]")
+	private List<WebElement> txtPhoneExtn;
+
+	@FindBy(xpath = "//select[contains(@name,'addressType')]")
+	private List<WebElement> ddnAddressType;
+
+	@FindBy(xpath = "//input[contains(@name,'addressLine')]")
+	private List<WebElement> txtStreetAddress;
+
+	@FindBy(xpath = "//input[contains(@name,'addressCity')]")
+	private List<WebElement> txtCity;
+
+	@FindBy(xpath = "//input[contains(@name,'addressState')]")
+	private List<WebElement> txtState;
+
+	@FindBy(xpath = "//input[contains(@name,'addressPostalCode')]")
+	private List<WebElement> txtPostalCode;
+
+	@FindBy(xpath = "//input[contains(@name,'accountCountry')]")
+	private List<WebElement> txtCountry;
+
+	@FindBy(linkText = "+ Add Phone Number")
+	private WebElement lnkAddPhoneNumber;
+
+	@FindBy(linkText = "+ Add Address")
+	private WebElement lnkAddAddress;
+
+	@FindBy(name = "arAccountCreditRating")
+	private WebElement ddnRating;
+
+	@FindBy(name = "arAccountBillingCycle")
+	private WebElement ddnBillingCycle;
+
+	@FindBy(name = "arAccountDeliveryMethod")
+	private WebElement ddnDeliveryMethod;
+
+	@FindBy(name = "arAccountCreditLimit")
+	private WebElement txtCreditLimit;
+
+	@FindBy(name = "arAccountCancelLimit")
+	private WebElement txtCancelLimit;
+
+	@FindBy(id = "saveButton-btn")
+	private WebElement btnAddAccount;
+
+	@FindBy(name = "arAccountCode")
+	private List<WebElement> txtCode;
+
+	@FindBy(xpath = "//button[contains(@name,'popover-button')]")
+	private List<WebElement> btnARAccountsThreeDots;
+
+	@FindBy(xpath = "//a[contains(@name,'edit-button')]")
+	private List<WebElement> lnkEditAccount;
+
+	@FindBy(className = "account-list-table")
+	private WebElement accountListTableContent;
+
+	@FindBy(className = "account-list-table-border-right-zero")
+	private WebElement accountListTableCheckBox;
+
+	@FindBy(name = "edit-button0")
+	private WebElement FirstlnkEditAccount;
+
+	@FindBy(className = "search-input-wrapper")
+	private WebElement sectionSearch;
+
+	@FindBy(className = "search-result-wrapper")
+	private WebElement sectionSearchResult;
+
+	@FindBy(id = "accountFilterStatusInactive-in-txt")
+	private WebElement filterInactive;
+
+	@FindBy(id = "accountFilterStatusActive-in-txt")
+	private WebElement filterActive;
+
+	@FindBy(xpath = ".//div[contains(@id,'filter-toolbar-view')]")
+	private WebElement filter;
+
+	@FindBy(id = "saveButton-btn")
+	private WebElement btnApplyChanges;
+
+	@FindBy(xpath = ".//div[contains(@id,'post-toolbar-view')]")
+	private WebElement post;
+
+	@FindBy(name = "popover-button0")
+	private WebElement FirstlnkthreeDots;
+
+	@FindBy(className = "tableLinksColumn")
+	private List<WebElement> threeDots;
+
+	@FindBy(className = "account-receivable-post-toolbar")
+	private WebElement postMenu;
+
+	@FindBy(id = "postChargesButton-btn")
+	private WebElement postChargesButton;
+
+	@FindBy(id = "postCancelButton-btn")
+	private WebElement postCancelButton;
+
+	@FindBy(id = "arAccountLevelSelect-select")
+	private WebElement hotelLevel;
+
+	@FindBy(id = "postChargeType0")
+	private WebElement drpDwnFirstChargeType;
+
+	@FindBy(xpath = "//select[contains(@id,'postChargeType')]")
+	private List<WebElement> drpDwnChargeType;
+
+	@FindBy(id = "addAnotherCharge")
+	private WebElement lnkAddAnotherCharge;
+
+	@FindBy(name = "postChargeAmount0")
+	private WebElement txtFirstChargeAmount;
+
+	@FindBy(xpath = "//input[contains(@name,'postChargeAmount')]")
+	private List<WebElement> TxtChargeAmount;
+	
+	@FindBy(xpath = "//input[contains(@id,'includeTaxesCheckbox')]")
+	private List<WebElement> TxtIncludeRadio;
+
+	@FindBy(xpath = "//input[contains(@name,'postSinglePaymentAmount')]")
+	private List<WebElement> TxtPaymentAmount;
+
+	@FindBy(name = "postSinglePaymentAmount0")
+	private WebElement TxtFirstPaymentAmount;
+
+	@FindBy(xpath = "//select[contains(@id,'postSinglePaymentType')]")
+	private List<WebElement> drpDwnPaymentType;
+
+	@FindBy(id = "postSinglePaymentType0")
+	private WebElement drpDwnFirstPaymentType;
+
+	@FindBy(id = "post-payment-button-btn")
+	private WebElement btnPostPayment;
+
+	@FindBy(id = "post-payment-cancel-button-btn")
+	private WebElement btnCancelPayment;
+
+	@FindBy(id = "postAddAnothePayment")
+	private WebElement lnkPostAnotherPayment;
+
+	@FindBy(id = "includeTaxesCheckbox0")
+	private WebElement chkBoxFirstIncludeTax;
+
+	@FindBy(className = "account-receivable-success-panel")
+	private WebElement SuccessPanel;
+
+	@FindBy(className = "payment-type-error-class")
+	private WebElement paymentTypeError;
+
+	//@FindBy(xpath = "//span[contains(@data-reactid,'postSinglePaymentAmount0.2')]")
+	@FindBy(xpath = "//div[@class='col-xs-12 col-sm-3 col-md-3']//span[2]")
+	private WebElement paymentAmountError;
+
+	@FindBy(className = "invoices-list-table")
+	private WebElement invoiceListTableContent;
+
+	//Old
+	@FindBy(className = "invoices-list-table-border-right-zero")
+	private WebElement invoiceListTableCheckBox;
+	
+	//Changed to below xpath because above one was not working-Mohamad
+	@FindBy(xpath = "//*[@class='invoices-list-checkbox-table-padding-zero invoices-list-checkbox-column-shadow']//tr")
+	private List <WebElement> invoiceListTableCheckBoxNew;
+
+	@FindBy(className = "credit-limit-warning-btn")
+	private WebElement btnCreditLimitWarning;
+
+	@FindBy(className = "account-search-bar__icon")
+	private WebElement btnSearchIcon;
+
+	@FindBy(name = "applyPayment0")
+	private WebElement btnApplyPayment;
+
+	@FindBy(className = "spark-popover__list-link")
+	private List<WebElement> btnApplyPayments;
+	
+	@FindBy(id = "apply-payment-btn")
+	private WebElement btnHeaderApplyPayment;
+
+	@FindBy(id = "archive-invoices-continue-btn")
+	private WebElement btnPopupYesArchieve;
+
+	@FindBy(className = "archive-invoices-item")
+	private WebElement lnkArchieveInvoices;
+
+	@FindBy(id = "viewArchiveInvoices-btn")
+	private WebElement lnkViewArchievedInvoices;
+
+	public By lnkViewArchievedInvoicesBy = By.id("viewArchiveInvoices-btn");
+	public By FilterElementBy = By.id("accountFilterStatusActive-in-txt");
+
+	@FindBy(className = "show-more")
+	private WebElement showMore;
+
+	@FindBy(className = "balance-header-view")
+	private WebElement headerOutstandingBalance;
+
+	@FindBy(className = "header-credit-limit-text")
+	private WebElement headerCreditLimit;
+
+	@FindBy(id = "archive-account-view")
+	private WebElement archiveinvoices;
+
+	@FindBy(className = "invoices-list__toolbar")
+	private WebElement invoiceHeader;
+
+	@FindBy(className = "account-list-footer")
+	private WebElement footerAccountsPage;
+
+	@FindBy(className = "spark-pagination__pages")
+	private WebElement footerPages;
+
+	@FindBy(id = "invoicesFilterStatusOpen")
+	private WebElement invoicesFilterStatusOpen;
+
+	@FindBy(id = "invoicesFilterStatusClose")
+	private WebElement invoicesFilterStatusClose;
+
+	@FindBy(id = "invoicesFilterStatusAll")
+	private WebElement invoicesFilterStatusAll;
+
+	@FindBy(xpath = ".//label[1]//input[contains(@aria-label,'month')]")
+	private WebElement startMonth;
+
+	@FindBy(xpath = ".//label[1]//input[contains(@aria-label,'day')]")
+	private WebElement startDay;
+
+	@FindBy(xpath = ".//label[1]//input[contains(@aria-label,'year')]")
+	private WebElement startYear;
+
+	@FindBy(xpath = ".//label[2]//input[contains(@aria-label,'month')]")
+	private WebElement EndMonth;
+
+	@FindBy(xpath = ".//label[2]//input[contains(@aria-label,'day')]")
+	private WebElement EndDay;
+
+	@FindBy(xpath = ".//label[2]//input[contains(@aria-label,'year')]")
+	private WebElement EndYear;
+
+	@FindBy(className = "account-list__toolbar")
+	private WebElement AccountsListToolBar;
+
+	@FindBy(id = "configuration-toolbar-view")
+	private WebElement Configuration;
+
+	@FindBy(className = "configurationList-item")
+	private WebElement S_RTemplate;
+
+	@FindBy(className = "create-reminder-modal-content")
+	private WebElement reminderTemplateModal;
+
+	@FindBy(id = "hotelLogo--in-chk")
+	private WebElement hotelLogo;
+
+	@FindBy(id = "hotelCode-in-chk")
+	private WebElement hotelCode_in_chk;
+
+	@FindBy(id = "hotelName-in-chk")
+	private WebElement hotelName_in_chk;
+
+	@FindBy(id = "hotelContactName-in-chk")
+	private WebElement hotelContactName_in_chk;
+
+	@FindBy(id = "hotelContactEmail-in-chk")
+	private WebElement hotelContactEmail_in_chk;
+
+	@FindBy(id = "hotelBusinessPhnNumber-in-chk")
+	private WebElement hotelBusinessPhnNumber_in_chk;
+
+	@FindBy(id = "hotelContactHome-in-chk")
+	private WebElement hotelContactHome_in_chk;
+
+	@FindBy(id = "hotelContactMobile-in-chk")
+	private WebElement hotelContactMobile_in_chk;
+
+	@FindBy(id = "hotelFax-in-chk")
+	private WebElement hotelFax_in_chk;
+
+	@FindBy(id = "hotelContactOther-in-chk")
+	private WebElement hotelContactOther_in_chk;
+
+	@FindBy(id = "hotelId-in-chk")
+	private WebElement hotelId_in_chk;
+
+	@FindBy(id = "hotelAddress-in-chk")
+	private WebElement hotelAddress_in_chk;
+
+	@FindBy(id = "hotelCountry-in-chk")
+	private WebElement hotelCountry_in_chk;
+
+	@FindBy(id = "acctCompanyName-in-chk")
+	private WebElement acctCompanyName_in_chk;
+
+	@FindBy(id = "acctCompanyWebsite-in-chk")
+	private WebElement acctCompanyWebsite_in_chk;
+
+	@FindBy(id = "acctContactName-in-chk")
+	private WebElement acctContactName_in_chk;
+
+	@FindBy(id = "acctContactEmail-in-chk")
+	private WebElement acctContactEmail_in_chk;
+
+	@FindBy(id = "acctBusinessPhnNumber-in-chk")
+	private WebElement acctBusinessPhnNumber_in_chk;
+
+	@FindBy(id = "acctAddress-in-chk")
+	private WebElement acctAddress_in_chk;
+
+	@FindBy(id = "acctBusinessAddr-in-rdo")
+	private WebElement acctBusinessAddr_in_rdo;
+
+	@FindBy(id = "acctFiscalAddr-in-rdo")
+	private WebElement acctFiscalAddr_in_rdo;
+
+	@FindBy(id = "acctOtherAddr-in-rdo")
+	private WebElement acctOtherAddr_in_rdo;
+
+	@FindBy(id = "acctCountry-in-chk")
+	private WebElement acctCountry_in_chk;
+
+	@FindBy(id = "ledgerInvoiceNumber-in-chk")
+	private WebElement ledgerInvoiceNumber_in_chk;
+
+	@FindBy(id = "ledgerAccountNumber-in-chk")
+	private WebElement ledgerAccountNumber_in_chk;
+
+	@FindBy(id = "guestName-in-chk")
+	private WebElement guestName_in_chk;
+
+	@FindBy(id = "ledgerCreationDate-in-chk")
+	private WebElement ledgerCreationDate_in_chk;
+
+	@FindBy(id = "ledgerLastStatementDate-in-chk")
+	private WebElement ledgerLastStatementDate_in_chk;
+
+	@FindBy(id = "statementText-in-txt")
+	private WebElement statementText_in_txt;
+
+	@FindBy(id = "statementReminderText-in-txt")
+	private WebElement statementReminderText_in_txt;
+
+	@FindBy(id = "reminderText-in-txt")
+	private WebElement reminderText_in_txt;
+
+	@FindBy(id = "reminderFooterText-in-txt")
+	private WebElement reminderFooterText_in_txt;
+
+	@FindBy(id = "cancel-btn")
+	private WebElement cancel_btn;
+
+	@FindBy(id = "save-btn")
+	private WebElement save_btn;
+
+	@FindBy(id = "continue-btn")
+	private WebElement statement_reminder_continue_btn;
+
+	@FindBy(id = "statement-reminder-cancel-btn")
+	private WebElement statement_reminder_cancel_btn;
+
+	@FindBy(xpath = ".//div[contains(@id,'statement-toolbar-')]")
+	private WebElement lnkCreateStatement;
+
+	@FindBy(xpath = ".//div[contains(@id,'reminder-toolbar-')]")
+	private WebElement lnkCreate_Reminder_Letter;
+
+	@FindBy(className = "invoices-list")
+	private WebElement invoiceListSection;
+
+	@FindBy(id = "print-delivery-in-chk")
+	private WebElement printStatement;
+
+	@FindBy(id = "email-delivery-in-chk")
+	private WebElement emailStatement;
+
+	@FindBy(id = "add-folios-in-chk")
+	private WebElement addFolioStatement;
+
+	@FindBy(className = "send-reminder-statement-modal")
+	private WebElement send_reminder_statement_modal;
+
+	@FindBy(className = "account-list-content__no-record-found")
+	private WebElement searchNoRecordFound;
+
+	@FindBy(id = "send-btn")
+	private WebElement sendStatement;
+
+	@FindBy(className = "post-charges-error-row ")
+	private WebElement post_charges_error;
+
+	/**
+	 * constructor to initialize the page sElements*
+	 * 
+	 */
+
+
+	public AccountReceivable() {
+		PageFactory.initElements(FunctionalLibrary.driver, this);
+	}
+
+	public List<HashMap<String, String>> getData() {
+		List<HashMap<String, String>> AR = ReadDatafromExcel.data(TestRunner1.TestDataLocation, "AR");
+		return AR;
+	}
+
+	public WebElement getDdnPreferredLanguage() {
+		return ddnPreferredLanguage;
+	}
+
+	public WebElement getTxtEmail() {
+		return txtEmail;
+	}
+
+	public WebElement getTxtWebsite() {
+		return txtWebsite;
+	}
+
+	public List<WebElement> getDdnPhoneType() {
+		return ddnPhoneType;
+	}
+
+	public List<WebElement> getTxtPhoneNumbers() {
+		return txtPhoneNumbers;
+	}
+	
+	public WebElement getTxtPhoneNumber2() {
+		return txtPhoneNumber2;
+	}
+	
+	public WebElement getTxtPhoneExtn2() {
+		return txtPhoneExtn2;
+	}
+
+	public List<WebElement> getTxtPhoneExtn() {
+		return txtPhoneExtn;
+	}
+
+	public List<WebElement> getDdnAddressType() {
+		return ddnAddressType;
+	}
+
+	public List<WebElement> getTxtStreetAddress() {
+		return txtStreetAddress;
+	}
+
+	public List<WebElement> getTxtCity() {
+		return txtCity;
+	}
+
+	public List<WebElement> getTxtState() {
+		return txtState;
+	}
+
+	public List<WebElement> getTxtPostalCode() {
+		return txtPostalCode;
+	}
+
+	public List<WebElement> getTxtCountry() {
+		return txtCountry;
+	}
+
+	public WebElement getLnkAddPhoneNumber() {
+		return lnkAddPhoneNumber;
+	}
+
+	public WebElement getLnkAddAddress() {
+		return lnkAddAddress;
+	}
+
+	public WebElement getDdnRating() {
+		return ddnRating;
+	}
+
+	public WebElement getDdnBillingCycle() {
+		return ddnBillingCycle;
+	}
+
+	public WebElement getDdnDeliveryMethod() {
+		return ddnDeliveryMethod;
+	}
+
+	public WebElement getTxtCreditLimit() {
+		return txtCreditLimit;
+	}
+
+	public WebElement getTxtCancelLimit() {
+		return txtCancelLimit;
+	}
+
+	public WebElement getBtnAddAccount() {
+		return btnAddAccount;
+	}
+
+	public WebElement getTxtCode() {
+		return txtCode.get(1);
+	}
+
+
+	public List<WebElement> getBtnARAccountsThreeDots() {
+		return btnARAccountsThreeDots;
+	}
+
+	public List<WebElement> getLnkEditAccount() {
+		return lnkEditAccount;
+	}
+
+	public WebElement getLnkCreatAccount() {
+		return lnkCreateAnAccount;
+	}
+
+	public WebElement getTxtAccountName() {
+		return txtAccountName;
+	}
+
+	public WebElement getTxtFirstName() {
+		return txtFirstName;
+	}
+
+	public WebElement getTxtLastName() {
+		return txtLastName;
+	}
+
+	public WebElement getFirstPhoneNumber() {
+		return txtPhoneNumber;
+	}
+
+	public WebElement getBtnAdd() {
+
+		return sectionAdd.findElement(By.id("saveButton-btn"));
+	}
+
+	public WebElement getBtnCancel() {
+
+		return sectionAdd.findElement(By.id("cancelButton-btn"));
+	}
+
+	public WebElement getRdoInactive() {
+
+		return sectionAdd.findElement(By.name("arAccountStatus-inactive"));
+	}
+
+	public WebElement getAccountListTableContent() {
+		return accountListTableContent;
+	}
+
+	public WebElement getAccountListTableContentCheckBox() {
+		return accountListTableCheckBox;
+	}
+
+	public WebElement getFirstEditLink() {
+		return FirstlnkEditAccount;
+	}
+
+	public WebElement getAccountSearchBox() {
+		return sectionSearch.findElement(By.tagName("input"));
+	}
+
+	public List<WebElement> getsearchResults() {
+		return sectionSearchResult.findElements(By.tagName("li"));
+	}
+
+	public WebElement getAccountsPageFilterActive() {
+		return filter.findElement(By.id("accountFilterStatusActive-in-txt"));
+	}
+
+	public WebElement getAccountsPageFilterInactive() {
+		return filter.findElement(By.id("accountFilterStatusInactive-in-txt"));
+	}
+
+	public WebElement getFilter() {
+		return filter;
+	}
+
+	public WebElement getFirstThreeDots() {
+		return FirstlnkthreeDots;
+	}
+
+	public WebElement getBtnPost() {
+		return post;
+	}
+
+	public WebElement getBtnApplyChanges() {
+		return btnApplyChanges;
+	}
+
+	public WebElement getBtnBatchCharges() {
+		return postMenu.findElements(By.tagName("li")).get(0);
+	}
+
+	public WebElement getBtnSingleAccountPayment() {
+		return postMenu.findElements(By.tagName("li")).get(1);
+	}
+
+	public WebElement getBtnPostCharges() {
+		return postChargesButton;
+	}
+
+	public WebElement getBtnpostCancel() {
+		return postCancelButton;
+	}
+
+	public WebElement getDrpdwnHotelLevel() {
+		return hotelLevel;
+	}
+
+	public WebElement getDrpdwnFirstChargeType() {
+		return drpDwnFirstChargeType;
+	}
+
+	public List<WebElement> getDrpdwnChargeTypes() {
+		return drpDwnChargeType;
+	}
+
+	public WebElement lnkAddAnotherCharge() {
+		return lnkAddAnotherCharge;
+	}
+
+	public WebElement getFirstChargeAmount() {
+		return txtFirstChargeAmount;
+	}
+
+	public List<WebElement> getChargeAmounts() {
+		return TxtChargeAmount;
+	}
+	
+	
+	public List<WebElement> getTxtIncludeRadio() {
+		return TxtIncludeRadio;
+	}
+
+	public List<WebElement> getPaymentAmounts() {
+		return TxtPaymentAmount;
+	}
+
+	public WebElement getFirstPaymentAmount() {
+		return TxtFirstPaymentAmount;
+	}
+
+	public List<WebElement> getdrpdwnPaymentTypes() {
+		return drpDwnPaymentType;
+	}
+
+	public WebElement getDrpdwnFirstPaymentType() {
+		return drpDwnFirstPaymentType;
+	}
+
+	public WebElement getBtnPostPayment() {
+		return btnPostPayment;
+	}
+
+	public WebElement getBtnCancelPayment() {
+		return btnCancelPayment;
+	}
+
+	public WebElement getLnkAddAnotherPayment() {
+		return lnkPostAnotherPayment;
+	}
+
+	public WebElement getChkFirstIncludeTax() {
+		return chkBoxFirstIncludeTax;
+	}
+
+	public WebElement getSuccessMessage() {
+		return SuccessPanel;
+	}
+
+	public WebElement getPaymentTypeErrorMessage() {
+		return paymentTypeError;
+
+	}
+
+	public WebElement getpaymentAmountErrorMessage() {
+		return paymentAmountError;
+
+	}
+
+	public WebElement getInvoiceListTableContent() {
+		return invoiceListTableContent;
+	}
+
+	public WebElement getInvoiceListTableContentCheckBox() {
+		return invoiceListTableCheckBox;
+	}
+	
+	public List<WebElement> getInvoiceListTableContentCheckBoxNew() {
+		return invoiceListTableCheckBoxNew;
+	}
+
+	public WebElement getBtnSearchIcon() {
+		return btnSearchIcon;
+	}
+
+	public WebElement getBtnFirstApplyPayment() {
+		return btnApplyPayment;
+	}
+	
+	public List<WebElement> getBtnApplyPayments() {
+		return btnApplyPayments;
+	}
+
+	public WebElement getBtnHeaderApplyPayment() {
+		return btnHeaderApplyPayment;
+	}
+
+	public WebElement getlnkArchieveInvoicesLedger() {
+		return invoiceHeader.findElement(By.className("archive-invoices-text"));
+	}
+
+	public WebElement getlnkViewArchievedInvoices() {
+		return lnkViewArchievedInvoices;
+	}
+
+	public WebElement getBtnPopupYesArchieve() {
+		return btnPopupYesArchieve;
+	}
+
+	public WebElement getBtnShowMore() {
+		return showMore.findElement(By.className("spark-toolbar__show-more"));
+	}
+
+	public WebElement getOutstandingBalance() {
+		return headerOutstandingBalance.findElement(By.className("account-balance-value"));
+	}
+
+	public WebElement getCreditLimit() {
+		return headerCreditLimit.findElement(By.className("credit-limit-value"));
+	}
+
+	public WebElement getCreditLimitWarning() {
+		return headerCreditLimit.findElement(By.className("credit-limit-warning-active"));
+	}
+
+	public WebElement getArchiveInvoicesAccount() {
+		return archiveinvoices;
+	}
+
+	public WebElement getInvoiceTableHeader() {
+		return invoiceHeader.findElement(By.tagName("h4"));
+
+	}
+
+	public WebElement getRdoActive() {
+
+		return sectionAdd.findElement(By.name("arAccountStatus-active"));
+	}
+
+	public WebElement getlnkAccountsPagePrevious() {
+		return footerAccountsPage.findElement(By.className("spark-pagination__arrow--previous"));
+	}
+
+	public WebElement getlnkAccountsPageNext() {
+		return footerAccountsPage.findElement(By.className("spark-pagination__arrow--next"));
+	}
+
+	public List<WebElement> getlnkAccountsTotalPages() {
+		return footerAccountsPage.findElements(By.className("spark-pagination__item"));
+	}
+
+	public WebElement getLedgerFilterOpen() {
+		return invoicesFilterStatusOpen;
+	}
+
+	public WebElement getLedgerFilterClosed() {
+		return invoicesFilterStatusClose;
+	}
+
+	public WebElement getLedgerFilterAll() {
+		return invoicesFilterStatusAll;
+	}
+
+	public WebElement getFilterStartDay() {
+		return startDay;
+	}
+
+	public WebElement getFilterStartMonth() {
+		return startMonth;
+	}
+
+	public WebElement getFilterStartYear() {
+		return startYear;
+	}
+
+	public WebElement getFilterEndDay() {
+		return EndDay;
+	}
+
+	public WebElement getFilterEndMonth() {
+		return EndMonth;
+	}
+
+	public WebElement getFilterEndYear() {
+		return EndYear;
+	}
+
+	public WebElement getAccountCount() {
+		return AccountsListToolBar.findElement(By.tagName("h4"));
+	}
+
+	public WebElement getConfiguration() {
+		return Configuration;
+
+	}
+
+	public WebElement getStatementReminder() {
+		return S_RTemplate;
+
+	}
+
+	public WebElement getReminderTemplateModal() {
+		return reminderTemplateModal;
+	}
+
+	public WebElement getHotelLogo() {
+		return hotelLogo;
+	}
+
+	public WebElement getHotelCode_in_chk() {
+		return hotelCode_in_chk;
+	}
+
+	public WebElement getHotelName_in_chk() {
+		return hotelName_in_chk;
+	}
+
+	public WebElement getHotelContactName_in_chk() {
+		return hotelContactName_in_chk;
+	}
+
+	public WebElement getHotelContactEmail_in_chk() {
+		return hotelContactEmail_in_chk;
+	}
+
+	public WebElement getHotelBusinessPhnNumber_in_chk() {
+		return hotelBusinessPhnNumber_in_chk;
+	}
+
+	public WebElement getHotelContactHome_in_chk() {
+		return hotelContactHome_in_chk;
+	}
+
+	public WebElement getHotelContactMobile_in_chk() {
+		return hotelContactMobile_in_chk;
+	}
+
+	public WebElement getHotelFax_in_chk() {
+		return hotelFax_in_chk;
+	}
+
+	public WebElement getHotelContactOther_in_chk() {
+		return hotelContactOther_in_chk;
+	}
+
+	public WebElement getHotelId_in_chk() {
+		return hotelId_in_chk;
+	}
+
+	public WebElement getHotelAddress_in_chk() {
+		return hotelAddress_in_chk;
+	}
+
+	public WebElement getHotelCountry_in_chk() {
+		return hotelCountry_in_chk;
+	}
+
+	public WebElement getAcctCompanyName_in_chk() {
+		return acctCompanyName_in_chk;
+	}
+
+	public WebElement getAcctCompanyWebsite_in_chk() {
+		return acctCompanyWebsite_in_chk;
+	}
+
+	public WebElement getAcctContactName_in_chk() {
+		return acctContactName_in_chk;
+	}
+
+	public WebElement getAcctContactEmail_in_chk() {
+		return acctContactEmail_in_chk;
+	}
+
+	public WebElement getAcctBusinessPhnNumber_in_chk() {
+		return acctBusinessPhnNumber_in_chk;
+	}
+
+	public WebElement getAcctAddress_in_chk() {
+		return acctAddress_in_chk;
+	}
+
+	public WebElement getAcctBusinessAddr_in_rdo() {
+		return acctBusinessAddr_in_rdo;
+	}
+
+	public WebElement getAcctFiscalAddr_in_rdo() {
+		return acctFiscalAddr_in_rdo;
+	}
+
+	public WebElement getAcctOtherAddr_in_rdo() {
+		return acctOtherAddr_in_rdo;
+	}
+
+	public WebElement getAcctCountry_in_chk() {
+		return acctCountry_in_chk;
+	}
+
+	public WebElement getLedgerInvoiceNumber_in_chk() {
+		return ledgerInvoiceNumber_in_chk;
+	}
+
+	public WebElement getLedgerAccountNumber_in_chk() {
+		return ledgerAccountNumber_in_chk;
+	}
+
+	public WebElement getLedgerGuestName_in_chk() {
+		return guestName_in_chk;
+	}
+
+	public WebElement getLedgerCreationDate_in_chk() {
+		return ledgerCreationDate_in_chk;
+	}
+
+	public WebElement getLedgerLastStatementDate_in_chk() {
+		return ledgerLastStatementDate_in_chk;
+	}
+
+	public WebElement getStatementText_in_txt() {
+		return statementText_in_txt;
+	}
+
+	public WebElement getstatement_footer_in_txt() {
+		return statementReminderText_in_txt;
+	}
+
+	public WebElement getReminderText_in_txt() {
+		return reminderText_in_txt;
+	}
+
+	public WebElement getReminderFooterText_in_txt() {
+		return reminderFooterText_in_txt;
+	}
+
+	public WebElement getCancel_btn() {
+		return cancel_btn;
+	}
+
+	public WebElement getSave_btn() {
+		return save_btn;
+	}
+
+	public WebElement getLnkCreateStatement() {
+		return lnkCreateStatement.findElement(By.className("archive-account"));
+	}
+
+	public WebElement getLnkCreateReminderLetter() {
+		return lnkCreate_Reminder_Letter.findElement(By.className("archive-account"));
+	}
+
+	public WebElement getInvoiceCountforTemplate() {
+		return invoiceListSection.findElement(By.tagName("h4"));
+	}
+
+	public WebElement getContinueStatement() {
+		return statement_reminder_continue_btn;
+	}
+
+	public WebElement getChk_PrintStatement() {
+		return send_reminder_statement_modal.findElement(By.id("print-delivery-in-chk"));
+	}
+
+	public WebElement getChk_EmailStatement() {
+		return send_reminder_statement_modal.findElement(By.id("email-delivery-in-chk"));
+	}
+
+	public WebElement getChk_AddFolioStatement() {
+		return send_reminder_statement_modal.findElement(By.id("add-folios-in-chk"));
+	}
+
+	public WebElement getSend_reminder_statement_modal() {
+		return send_reminder_statement_modal;
+	}
+
+	public WebElement getSearchNoRecordFound() {
+		return searchNoRecordFound;
+	}
+
+	public WebElement getBtnSendStatement() {
+		return sendStatement;
+	}
+
+	public WebElement getPostChargesError() {
+		return post_charges_error;
+	}
+	
+	@FindBy(name = "account-receivable-toggle")
+	private WebElement btnARAccountsToggle;
+	
+	@FindBy(name = "account-receivable-report-toggle")
+	private WebElement btnARReportLogToggle;
+	
+	@FindBy(xpath = "//*[@id='main-container']/section/div[3]/section/div/div/div[3]/button")
+	private WebElement btnARSearch;
+	
+	@FindBy(id = "create-account-lnk")
+	private WebElement lnkCreateARAccount;
+	
+	@FindBy(id = "filter-toolbar-view")
+	private WebElement lnkARFilterView;
+	
+	@FindBy(xpath = "//h3[@class='account-receivable__title-label' and text()='Accounts Receivable']")
+	private WebElement hdgARPageTitle;
+	
+	@FindBy(className = "spark-toolbar__container--visible")
+						//*[@id="main-container"]/section/div[3]/div/section/div/div[1]/div[1]/div/div[2]/div/div[1]")
+	private WebElement tbarARMenu;
+	
+					/*AR Create Account Modal Elements*/
+	
+					@FindBy(id = "arAccountName-in-txt")
+					private WebElement txtARModCompanyName;
+	
+					@FindBy(xpath = "//h4[@class='modal-header-text' and text()='Add AR Account']")
+					private WebElement hdgAddARAccountModalTitle;
+					
+					@FindBy(xpath = "//h6[text()='Statement Preference']")
+					private WebElement hdgARModStatementPreference;
+				
+					@FindBy(id = "arAccountLevelSelect-select")
+					private WebElement ddnARModAccountLevel;
+					
+					@FindBy(id = "arAccountCreditRating-select")
+					private WebElement ddnARModCreditRating;
+					
+					@FindBy(id = "arAccountCreditLimit-in-txt")
+					private WebElement txtARModCreditLimit;
+					
+					@FindBy(id = "arAccountCancelLimit-in-txt")
+					private WebElement txtARModCancelLimit;
+					
+					@FindBy(id = "contactFirstName-in-txt")
+					private WebElement txtARModContactFirstName;
+					
+					@FindBy(id = "contactLastName-in-txt")
+					private WebElement txtARModContactLastName;
+					
+					@FindBy(id = "preferredLangId-in-txt")
+					private WebElement ddnARModPreferredLang;
+					
+					@FindBy(id = "contactEmail-in-txt")
+					private WebElement txtARModContactEmail;
+					
+					@FindBy(id = "contactWebsite-in-txt")
+					private WebElement txtARModContactWebsite;
+					
+					@FindBy(id = "arAccountCode-in-txt")
+					private WebElement txtARModAccountCode;
+					
+					@FindBy(id = "phoneType0-select")
+					private WebElement ddnARModPhoneType;
+					
+					@FindBy(id = "phoneNumber0-in-txt")
+					private WebElement txtARModPhoneNumber;
+					
+					@FindBy(id = "phoneExtn0-in-txt")
+					private WebElement txtARModPhoneExt;
+					
+					@FindBy(id = "addressType0")
+					private WebElement ddnARModAddressType;
+					
+					@FindBy(id = "addressLine0-in-txt")
+					private WebElement txtARModAddress;
+					
+					@FindBy(id = "addressCity0-in-txt")
+					private WebElement txtARModAddressCity;
+					
+					@FindBy(id = "addressState0-in-txt")
+					private WebElement txtARModAddressState;
+					
+					@FindBy(id = "addressPostalCode0-in-txt")
+					private WebElement txtARModPostalCode;
+					
+					@FindBy(id = "accountCountry0-in-txt")
+					private WebElement txtARModCountry;
+					
+					@FindBy(id = "arAccountDeliveryMethod-select")
+					private WebElement ddnARModStatementPreference;
+					
+					@FindBy(id = "cancelButton-btn")
+					private WebElement btnARModCancel;
+					
+					@FindBy(id = "saveButton-btn")
+					private WebElement btnARModAdd;
+					
+					
+					
+								public WebElement gethdgARModStatementPreference() {
+									return hdgARModStatementPreference;
+								}
+								
+								public WebElement gettxtARModCompanyName() {
+									return txtARModCompanyName;
+								}
+		
+								public WebElement gethdgAddARAccountModalTitle() {
+									return hdgAddARAccountModalTitle;
+								}
+								
+								public WebElement getddnARModAccountLevel() {
+									return ddnARModAccountLevel;
+								}
+								
+								public WebElement getddnARModCreditRating() {
+									return ddnARModCreditRating;
+								}
+								
+								public WebElement gettxtARModCreditLimit() {
+									return txtARModCreditLimit;
+								}
+								
+								public WebElement gettxtARModCancelLimit() {
+									return txtARModCancelLimit;
+								}
+								
+								public WebElement gettxtARModContactFirstName() {
+									return txtARModContactFirstName;
+								}
+								
+								public WebElement gettxtARModContactLastName() {
+									return txtARModContactLastName;
+								}
+								
+								public WebElement getddnARModPreferredLang() {
+									return ddnARModPreferredLang;
+								}
+								
+								public WebElement gettxtARModContactEmail() {
+									return txtARModContactEmail;
+								}
+								
+								public WebElement gettxtARModContactWebsite() {
+									return txtARModContactWebsite;
+								}
+								
+								public WebElement gettxtARModAccountCode() {
+									return txtARModAccountCode;
+								}
+								
+								public WebElement getddnARModPhoneType() {
+									return ddnARModPhoneType;
+								}
+								public WebElement gettxtARModPhoneNumber() {
+									return txtARModPhoneNumber;
+								}
+								
+								public WebElement gettxtARModPhoneExt() {
+									return txtARModPhoneExt;
+								}
+								public WebElement getddnARModAddressType() {
+									return ddnARModAddressType;
+								}
+								
+								public WebElement gettxtARModAddress() {
+									return txtARModAddress;
+								}
+								
+								public WebElement gettxtARModAddressCity() {
+									return txtARModAddressCity;
+								}
+								
+								public WebElement gettxtARModAddressState() {
+									return txtARModAddressState;
+								}
+								
+								public WebElement gettxtARModPostalCode() {
+									return txtARModPostalCode;
+								}
+								
+								public WebElement gettxtARModCountry() {
+									return txtARModCountry;
+								}
+								
+								public WebElement getddnARModStatementPreference() {
+									return ddnARModStatementPreference;
+								}
+								
+								public WebElement getbtnARModCancel() {
+									return btnARModCancel;
+								}
+								
+								public WebElement getbtnARModAdd() {
+									return btnARModAdd;
+								}
+								
+	
+				public WebElement getbtnARAccountsToggle() {
+					return btnARAccountsToggle;
+				}
+				
+				public WebElement gettbarARMenu() {
+					return tbarARMenu;
+				}
+				
+				public WebElement getbtnARReportLogToggle() {
+					return btnARReportLogToggle;
+				}
+				
+				public WebElement getbtnARSearch() {
+					return btnARSearch;
+				}
+				
+				public WebElement getlnkARFilterView() {
+					return lnkARFilterView;
+				}
+				
+				public WebElement getlnkCreateARAccount() {
+					return lnkCreateARAccount;
+				}
+				
+				public WebElement gethdgARPageTitle() {
+					return hdgARPageTitle;
+				}
+
+	public List<WebElement> getFirstRecordFromAccountListTable() {
+
+		List<WebElement> rows = getAccountListTableContent().findElements(By.tagName("tr"));
+		List<WebElement> columns = rows.get(1).findElements(By.tagName("td"));
+		return columns;
+	}
+
+	public void waitForSuccessMessageToDisappear() {
+		WebDriverWait wait = new WebDriverWait(driver, 90);
+		wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.className("hide-confirmation-message")));
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void selectAccountFromAccountListTable(String sectionID) {
+		List<WebElement> rows = accountListTableContent.findElements(By.tagName("tr"));
+		for (int i = 1; i < rows.size(); i++) {
+			List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+			if (columns.get(2).getText().equals(sectionID)) {
+				click(accountListTableCheckBox.findElements(By.tagName("tr")).get(i));
+				break;
+			}
+		}
+	}
+
+	public List<WebElement> getRowFromAccountListTable(String sectionID) {
+		List<WebElement> requiredrow = null;
+		List<WebElement> rows = accountListTableContent.findElements(By.tagName("tr"));
+		for (int i = 1; i < rows.size(); i++) {
+			List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+			if (columns.get(2).getText().equals(sectionID)) {
+				requiredrow = columns;
+				break;
+			}
+		}
+		return requiredrow;
+	}
+
+	public void waitForAccountIDToVisible(String accountID) {
+		WebDriverWait wait = new WebDriverWait(driver, 60);
+		List<WebElement> row = getFirstRecordFromAccountListTable();
+		wait.until(ExpectedConditions.textToBePresentInElement(row.get(2), accountID));
+	}
+
+	public List<String> getListOfBalanceFromInvoiceListTable() {
+		List<String> balanceList = new ArrayList<>();
+		String balance = null;
+		List<WebElement> rows = invoiceListTableContent.findElements(By.tagName("tr"));
+		for (int i = 1; i < rows.size(); i++) {
+			List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+			balance = columns.get(5).getText();
+			balance = balance.replaceAll("[\\[\\](){}]", "");
+			balanceList.add(balance);
+		}
+		return balanceList;
+	}
+
+	public void goToLedgerPageForAnAccount(String sectionID) {
+		List<WebElement> requiredColumns = null;
+		int currentRowIndex = 0;
+		List<WebElement> rows = accountListTableContent.findElements(By.tagName("tr"));
+		for (int i = 1; i < rows.size(); i++) {
+			List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+			if (columns.get(2).getText().equals(sectionID)) {
+				requiredColumns = columns;
+				currentRowIndex = i - 1;
+				break;
+			}
+		}
+		click(requiredColumns.get(8));
+		click(driver.findElement(By.name("view-button" + currentRowIndex)));
+	}
+
+	public void singleSelectAndApplyPaymentFromLedgerPage(String invoiceAmount) throws AWTException, InterruptedException {
+		int currentRowIndex = 0;
+		
+		System.out.println("invoiceAmount:"+invoiceAmount);
+		List<WebElement> requiredColumns = null;
+		List<WebElement> rows = getInvoiceListTableContent().findElements(By.tagName("tr"));
+		System.out.println("Nos of tr:"+ rows.size());
+		for (int i = 1; i < rows.size(); i++) {
+			List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+			System.out.println("text in 7th:"+columns.get(7).getText());
+			System.out.println("text in 1th:"+columns.get(1).getText());
+			System.out.println("text in 2th:"+columns.get(2).getText());
+			System.out.println("text in 3th:"+columns.get(3).getText());
+			if (columns.get(5).getText().equals(invoiceAmount)) {
+				requiredColumns = columns;
+				currentRowIndex = i;
+				break;
+			}
+		}
+		
+		System.out.println("currentRowIndex:"+currentRowIndex);
+		JsScrollPageCompletelyUp();
+		click(getInvoiceListTableContentCheckBoxNew().get(currentRowIndex));
+		pause(2000);
+		setText(requiredColumns.get(6).findElement(By.tagName("input")), invoiceAmount);
+	}
+
+	public void selectAllAndApplyPaymentFromLedgerPage(String invoiceAmount) throws AWTException, InterruptedException {
+		List<WebElement> requiredColumns = null;
+		List<WebElement> rows = getInvoiceListTableContent().findElements(By.tagName("tr"));
+		for (int i = 1; i < rows.size(); i++) {
+			List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+			if (columns.get(7).getText().equals(invoiceAmount)) {
+				requiredColumns = columns;
+				break;
+			}
+		}
+		ScrollPageCompletelyUp();
+		pause(3000);
+		setText(requiredColumns.get(6).findElement(By.tagName("input")), invoiceAmount);
+	}
+
+	public void clickPostButton() {
+
+		try {
+			//driver.findElement(By.className("invoices-list-toolbar-container-hidden"));
+			clickjs(getBtnPost());
+		}
+
+		catch (Exception e) {
+			clickjs(getBtnShowMore());
+			clickjs(getBtnPost());
+		}
+	}
+
+	public void waitForSearchResultToDisappear() {
+		WebDriverWait wait = new WebDriverWait(driver, 90);
+		// wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy());
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void clickStatementReminderTemplate() {
+		clickjs(getBtnShowMore());
+		click(getConfiguration());
+		click(getStatementReminder());
+	}
+
+}

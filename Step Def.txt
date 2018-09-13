@@ -1,0 +1,1885 @@
+package com.stepdefinition;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
+import org.testng.Assert;
+
+import com.ObjectRepository.AccountReceivable;
+import com.ObjectRepository.PMSNavigationMenu;
+import com.resources.FunctionalLibrary;
+
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+
+public class AccountRecievablesSteps extends FunctionalLibrary {
+
+	private static String accountId;
+	private static String accountId1;
+	private static String accountId2;
+	private static List<String> InvoiceListBefore = new ArrayList<String>();
+	private static List<String> InvoiceListAfter = new ArrayList<String>();
+	private static List<String> accountID = new ArrayList<String>();
+	private static String totalAccountsBefore;
+	private static List<String> InvoiceListStatement = new ArrayList<String>();
+
+
+	@Given("^I navigate to create account section$")
+	public void i_navigate_to_create_account_section() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getLnkCreatAccount());
+		waitForElementVisibility(ar.getAccountListTableContent());
+		totalAccountsBefore = getText(ar.getAccountCount());
+		clickjs(ar.getLnkCreatAccount());
+	}
+
+	@When("^I enter the mandatory fields \"([^\"]*)\"$")
+	public void i_enter_the_mandatory_fields(String row) throws Throwable {
+		AccountReceivable AR = new AccountReceivable();
+		setText(AR.getTxtAccountName(), AR.getData().get(Integer.parseInt(row) - 1).get("CompanyName"));
+		setText(AR.getTxtFirstName(), AR.getData().get(Integer.parseInt(row) - 1).get("FirstName"));
+		setText(AR.getTxtLastName(), AR.getData().get(Integer.parseInt(row) - 1).get("LastName"));
+		setText(AR.getFirstPhoneNumber(), AR.getData().get(Integer.parseInt(row) - 1).get("PhoneNumber"));
+		setText(AR.getTxtEmail(), AR.getData().get(Integer.parseInt(row) - 1).get("Email"));
+	}
+
+	@When("^I update mandatory fields \"([^\"]*)\"$")
+	public void i_update_mandatory_fields(String fieldsDetails) {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getFirstThreeDots());
+		click(ar.getFirstEditLink());
+		setText(ar.getTxtAccountName(), ar.getData().get(Integer.parseInt(fieldsDetails) - 1).get("CompanyName"));
+		setText(ar.getTxtFirstName(), ar.getData().get(Integer.parseInt(fieldsDetails) - 1).get("FirstName"));
+		setText(ar.getTxtLastName(), ar.getData().get(Integer.parseInt(fieldsDetails) - 1).get("LastName"));
+		click(ar.getBtnAdd());
+		ar.waitForSuccessMessageToDisappear();
+
+	}
+
+	
+	@Then("^I should see the changes \"([^\"]*)\" updated in account list table$")
+	public void i_should_see_the_changes_updated_in_account_list_table(String fieldsDetails) {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getFirstThreeDots());
+		click(ar.getFirstEditLink());
+		Assert.assertEquals(ar.getTxtAccountName().getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldsDetails) - 1).get("CompanyName"));
+		Assert.assertEquals(ar.getTxtFirstName().getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldsDetails) - 1).get("FirstName"));
+		Assert.assertEquals(ar.getTxtLastName().getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldsDetails) - 1).get("LastName"));
+	}
+
+	@Then("^The add button should be enabled$")
+	public void The_add_button_should_be_enabled() {
+		AccountReceivable AR = new AccountReceivable();
+		Assert.assertTrue(AR.getBtnAdd().isEnabled());
+		click(AR.getBtnCancel());
+	}
+
+	@When("^I enter the mandatory fields to add new account \"([^\"]*)\"$")
+	public void i_enter_the_mandatory_fields_to_add_new_aacount(String fieldDetails) {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getLnkCreatAccount());
+		clickjs(ar.getLnkCreatAccount());
+		setText(ar.getTxtAccountName(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("CompanyName"));
+		setText(ar.getTxtFirstName(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("FirstName"));
+		setText(ar.getTxtLastName(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("LastName"));
+		setText(ar.getFirstPhoneNumber(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("PhoneNumber"));
+		setText(ar.getTxtEmail(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Email"));
+		clickjs(ar.getBtnAddAccount());
+		driver.navigate().refresh();
+	}
+
+	@Then("^I should see the account \"([^\"]*)\" added to the account view list$")
+	public void i_should_see_the_account_added_to_the_account_view_list(String accountDetails) {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		List<WebElement> FirstRow = ar.getFirstRecordFromAccountListTable();
+		String companyName = FirstRow.get(0).getText();
+		String contactName = FirstRow.get(5).getText();
+		accountId = FirstRow.get(2).getText();
+		Assert.assertEquals(ar.getData().get(Integer.parseInt(accountDetails) - 1).get("CompanyName"), companyName);
+		//Assert.assertTrue(
+		//		contactName.contains(ar.getData().get(Integer.parseInt(accountDetails) - 1).get("FirstName")));
+		//Assert.assertTrue(contactName.contains(ar.getData().get(Integer.parseInt(accountDetails) - 1).get("LastName")));
+	}
+
+	@When("^I enter the invalid data type values \"([^\"]*)\" to all the fields in create account modal$")
+	public void i_enter_invalid_data_to_create_account(String invalidFieldDetails) {
+		AccountReceivable ar = new AccountReceivable();
+		clickjs(ar.getLnkCreatAccount());
+		setText(ar.getTxtAccountName(), ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("CompanyName"));
+		setText(ar.getTxtCode(), ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("Code"));
+		setText(ar.getTxtFirstName(), ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("FirstName"));
+		setText(ar.getTxtLastName(), ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("LastName"));
+		setText(ar.getTxtPhoneNumbers().get(0),
+				ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("PhoneNumber"));
+		setText(ar.getTxtPhoneExtn().get(0),
+				ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("Extension"));
+		setText(ar.getTxtStreetAddress().get(0),
+				ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("Address"));
+		setText(ar.getTxtCity().get(0), ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("City"));
+		setText(ar.getTxtState().get(0), ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("State"));
+		setText(ar.getTxtPostalCode().get(0),
+				ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("PostalCode"));
+		setText(ar.getTxtCountry().get(0), ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("Country"));
+		setText(ar.getTxtCreditLimit(),
+				ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("Credit Limit"));
+		setText(ar.getTxtCancelLimit(),
+				ar.getData().get(Integer.parseInt(invalidFieldDetails) - 1).get("Cancel Limit"));
+	}
+
+	@Then("^All the fields should not accept the entered values$")
+	public void all_the_fields_should_not_accept_the_entered_values() {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertEquals(ar.getTxtAccountName().getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtCode().getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtFirstName().getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtLastName().getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtCode().getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtPhoneNumbers().get(0).getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtPhoneExtn().get(0).getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtStreetAddress().get(0).getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtCity().get(0).getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtState().get(0).getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtPostalCode().get(0).getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtCountry().get(0).getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtCreditLimit().getAttribute("value"), "");
+		Assert.assertEquals(ar.getTxtCancelLimit().getAttribute("value"), "");
+	}
+
+	@When("^I enter the exceeded values \"([^\"]*)\" to all the fields$")
+	public void i_enter_the_exceeded_values_to_all_the_fields(String fieldDetails) throws InterruptedException {
+		AccountReceivable ar = new AccountReceivable();
+		clickjs(ar.getLnkCreatAccount());
+		pause(2000);
+		setText(ar.getTxtAccountName(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("CompanyName"));
+		click(ar.getTxtCode());
+		setText(ar.getTxtCode(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Code"));
+		setText(ar.getTxtFirstName(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("FirstName"));
+		setText(ar.getTxtLastName(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("LastName"));
+		setText(ar.getTxtPhoneNumbers().get(0),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("PhoneNumber"));
+		setText(ar.getTxtPhoneExtn().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Extension"));
+		setText(ar.getTxtStreetAddress().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Address"));
+		setText(ar.getTxtCity().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("City"));
+		setText(ar.getTxtState().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("State"));
+		setText(ar.getTxtPostalCode().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("PostalCode"));
+		setText(ar.getTxtCountry().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Country"));
+		setText(ar.getTxtCreditLimit(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Credit Limit"));
+		setText(ar.getTxtCancelLimit(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Cancel Limit"));
+	}
+
+	@Then("^All the fields should accepted only the truncated values \"([^\"]*)\"$")
+	public void all_the_fields_should_accepted_only_the_truncated_values(String fieldDetails) {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertEquals(ar.getTxtAccountName().getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("CompanyName").substring(0, 50));
+		Assert.assertEquals(ar.getTxtCode().getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Code").substring(0, 50));
+		Assert.assertEquals(ar.getTxtFirstName().getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("FirstName").substring(0, 50));
+		Assert.assertEquals(ar.getTxtLastName().getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("LastName").substring(0, 50));
+		Assert.assertEquals(ar.getTxtPhoneNumbers().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("PhoneNumber").substring(0, 10));
+		Assert.assertEquals(ar.getTxtPhoneExtn().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Extension").substring(0, 10));
+		Assert.assertEquals(ar.getTxtStreetAddress().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Address").substring(0, 250));
+		Assert.assertEquals(ar.getTxtCity().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("City").substring(0, 100));
+		Assert.assertEquals(ar.getTxtState().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("State").substring(0, 100));
+		Assert.assertEquals(ar.getTxtPostalCode().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("PostalCode").substring(0, 50));
+		Assert.assertEquals(ar.getTxtCountry().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Country").substring(0, 10));
+		Assert.assertEquals(ar.getTxtCreditLimit().getAttribute("value"),
+				truncateDecimal(
+						Double.parseDouble(ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Credit Limit")), 3)
+								.toString());
+		Assert.assertEquals(ar.getTxtCancelLimit().getAttribute("value"),
+				truncateDecimal(
+						Double.parseDouble(ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Cancel Limit")), 3)
+								.toString());
+	}
+
+	@When("^I choose create an account link to create new account$")
+	public void i_choose_create_an_account_link_to_create_new_account() {
+		AccountReceivable ar = new AccountReceivable();
+		clickjs(ar.getLnkCreatAccount());
+	}
+
+	@Then("^I should see expected default values \"([^\"]*)\"set to the fields as status, level, billing cycle, rating$")
+	public void i_should_see_the_expected_default_values(String defaultValues) {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertTrue(ar.getRdoActive().isSelected());
+		/*
+		 * Assert.assertEquals(dropDownSelectedValue(ar.getDdnLevel),
+		 * ar.getData().get(Integer.parseInt(defaultValues) - 1).get("Level"));
+		 */
+	
+		Assert.assertEquals(dropDownSelectedValue(ar.getDdnRating()),
+				ar.getData().get(Integer.parseInt(defaultValues) - 1).get("Rating"));
+		/*Assert.assertEquals(dropDownSelectedValue(ar.getDdnBillingCycle()),
+				ar.getData().get(Integer.parseInt(defaultValues) - 1).get("Billing Cycle"));*/
+	}
+
+	@When("^I create an account \"([^\"]*)\" with one phone number$")
+	public void i_create_an_account_with_phone_number(String accountDetails) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		clickjs(ar.getLnkCreatAccount());
+		i_enter_the_mandatory_fields(accountDetails);
+	}
+
+	@When("^I choose add phone number link to add additional phone number \"([^\"]*)\"$")
+	public void i_choose_add_address_link_to_add_additional_phone_number(String phoneNumber) {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getLnkAddPhoneNumber());
+		setText(ar.getTxtPhoneNumbers().get(1),
+				ar.getData().get(Integer.parseInt(phoneNumber) - 1).get("AdditionalPhoneNumber1"));
+		click(ar.getBtnAddAccount());
+	}
+
+	@Then("^I should see the two phone numbers \"([^\"]*)\" added to the account \"([^\"]*)\"$")
+	public void i_should_see_the_two_phone_numbers_added(String phoneNumber, String accountDetails) {
+		AccountReceivable ar = new AccountReceivable();
+		List<String> PhoneNumberList = new ArrayList<String>();
+		ar.waitForSuccessMessageToDisappear();
+		waitForElementClickable(ar.getFirstThreeDots());
+		clickjs(ar.getFirstThreeDots());
+		waitForElementVisibility(ar.getFirstEditLink());
+		click(ar.getFirstEditLink());
+		waitForElementVisibility(ar.getTxtPhoneNumbers().get(1));
+		PhoneNumberList.add(ar.getTxtPhoneNumbers().get(0).getAttribute("Value"));
+		PhoneNumberList.add(ar.getTxtPhoneNumbers().get(1).getAttribute("Value"));
+		Assert.assertTrue(PhoneNumberList
+				.contains(ar.getData().get(Integer.parseInt(phoneNumber) - 1).get("AdditionalPhoneNumber1")));
+		Assert.assertTrue(
+				PhoneNumberList.contains(ar.getData().get(Integer.parseInt(phoneNumber) - 1).get("PhoneNumber")));
+
+	}
+
+	@When("^I create an account \"([^\"]*)\" with one address$")
+	public void i_create_an_account_with_one_address(String accountDetails) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getLnkCreatAccount());
+		clickjs(ar.getLnkCreatAccount());
+		i_enter_the_mandatory_fields(accountDetails);
+		setText(ar.getTxtStreetAddress().get(0), ar.getData().get(Integer.parseInt(accountDetails) - 1).get("Address"));
+		setText(ar.getTxtCity().get(0), ar.getData().get(Integer.parseInt(accountDetails) - 1).get("City"));
+		waitForElementVisibility(ar.getTxtState().get(0));
+		setText(ar.getTxtState().get(0), ar.getData().get(Integer.parseInt(accountDetails) - 1).get("State"));
+		setText(ar.getTxtPostalCode().get(0), ar.getData().get(Integer.parseInt(accountDetails) - 1).get("PostalCode"));
+		setText(ar.getTxtCountry().get(0), ar.getData().get(Integer.parseInt(accountDetails) - 1).get("Country"));
+	}
+
+	@When("^I choose add address link to add additional address \"([^\"]*)\"$")
+	public void i_choose_add_address_link_to_add_additional_address(String address) {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getLnkAddAddress());
+		waitForElementVisibility(ar.getTxtStreetAddress().get(1));
+		setText(ar.getTxtStreetAddress().get(1),
+				ar.getData().get(Integer.parseInt(address) - 1).get("AdditionalStreetAddress1"));
+		setText(ar.getTxtCity().get(1), ar.getData().get(Integer.parseInt(address) - 1).get("AdditionalCity1"));
+		setText(ar.getTxtState().get(1), ar.getData().get(Integer.parseInt(address) - 1).get("AdditionalState1"));
+		setText(ar.getTxtPostalCode().get(1),
+				ar.getData().get(Integer.parseInt(address) - 1).get("AdditionalPostalCode1"));
+		setText(ar.getTxtCountry().get(1), ar.getData().get(Integer.parseInt(address) - 1).get("AdditionalCountry1"));
+		click(ar.getBtnAddAccount());
+	}
+
+	@Then("^I should see the two addresses \"([^\"]*)\" added to the account \"([^\"]*)\"$")
+	public void i_should_see_the_two_addresses_added(String address, String accountDetails) {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		clickjs(ar.getFirstThreeDots());
+		waitForElementVisibility(ar.getFirstEditLink());
+		click(ar.getFirstEditLink());
+		waitForElementVisibility(ar.getTxtStreetAddress().get(1));
+		Assert.assertEquals(ar.getTxtStreetAddress().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(address) - 1).get("Address"));
+		Assert.assertEquals(ar.getTxtCity().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(address) - 1).get("City"));
+		Assert.assertEquals(ar.getTxtState().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(address) - 1).get("State"));
+		Assert.assertEquals(ar.getTxtPostalCode().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(address) - 1).get("PostalCode"));
+		Assert.assertEquals(ar.getTxtCountry().get(0).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(address) - 1).get("Country"));
+
+		Assert.assertEquals(ar.getTxtStreetAddress().get(1).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(address) - 1).get("AdditionalStreetAddress1"));
+		Assert.assertEquals(ar.getTxtCity().get(1).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(address) - 1).get("AdditionalCity1"));
+		Assert.assertEquals(ar.getTxtState().get(1).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(address) - 1).get("AdditionalState1"));
+		Assert.assertEquals(ar.getTxtPostalCode().get(1).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(address) - 1).get("AdditionalPostalCode1"));
+		Assert.assertEquals(ar.getTxtCountry().get(1).getAttribute("value"),
+				ar.getData().get(Integer.parseInt(address) - 1).get("AdditionalCountry1"));
+	}
+
+	@When("^I click the add button$")
+	public void i_click_the_add_button() throws Throwable {
+		AccountReceivable AR = new AccountReceivable();
+		click(AR.getBtnAdd());
+	}
+
+	@When("^I click cancel button$")
+	public void i_click_cancel_button() throws Throwable {
+		AccountReceivable AR = new AccountReceivable();
+		click(AR.getBtnCancel());
+	}
+
+	@Then("^The account should not be added$")
+	public void the_account_should_not_be_added() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertEquals(getText(ar.getAccountCount()), totalAccountsBefore);
+	}
+
+	@When("^I select Inactive status$")
+	public void i_select_Inactive_status() throws Throwable {
+		AccountReceivable AR = new AccountReceivable();
+		click(AR.getRdoInactive());
+	}
+
+	@When("^I modify account status to inactive$")
+	public void i_modify_account_status_to_inactive() throws Throwable {
+		AccountReceivable AR = new AccountReceivable();
+		click(AR.getFirstThreeDots());
+		click(AR.getFirstEditLink());
+		click(AR.getRdoInactive());
+		click(AR.getBtnAdd());
+		AR.waitForSuccessMessageToDisappear();
+	}
+
+	@When("^I enter the mandatory fields \"([^\"]*)\" in the Edit Modal$")
+	public void i_enter_the_mandatory_fields_in_the_Edit_Modal(String fieldValues) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		setText(ar.getTxtAccountName(), ar.getData().get(Integer.parseInt(fieldValues) - 1).get("CompanyName"));
+		setText(ar.getTxtFirstName(), ar.getData().get(Integer.parseInt(fieldValues) - 1).get("FirstName"));
+		setText(ar.getTxtLastName(), ar.getData().get(Integer.parseInt(fieldValues) - 1).get("LastName"));
+		setText(ar.getTxtPhoneNumbers().get(0), ar.getData().get(Integer.parseInt(fieldValues) - 1).get("PhoneNumber"));
+	}
+
+	@Then("^I click cancel button in the Edit Modal$")
+	public void i_click_cancel_button_in_the_Edit_Modal() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getBtnCancel());
+	}
+
+	@Then("^I should see the changes \"([^\"]*)\" are not updated in account list table$")
+	public void i_should_see_the_changes_are_not_updated_in_account_list_table(String fieldValues) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getBtnARAccountsThreeDots().get(0));
+		click(ar.getLnkEditAccount().get(0));
+		Assert.assertNotEquals(ar.getTxtAccountName().getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("CompanyName"));
+		Assert.assertNotEquals(ar.getTxtFirstName().getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("FirstName"));
+		Assert.assertNotEquals(ar.getTxtLastName().getAttribute("value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("LastName"));
+		Assert.assertNotEquals(ar.getTxtPhoneNumbers().get(0).getText(),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("PhoneNumber"));
+
+	}
+
+	@Then("^I choose add phone number link to add phone number \"([^\"]*)\" in the Edit Modal$")
+	public void I_choose_add_phone_number_link_to_add_phone_number(String fieldValues) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getBtnARAccountsThreeDots().get(0));
+		click(ar.getBtnARAccountsThreeDots().get(0));
+		waitForElementVisibility(ar.getFirstEditLink());
+		click(ar.getFirstEditLink());
+		waitForElementVisibility(ar.getLnkAddPhoneNumber());
+		click(ar.getLnkAddPhoneNumber());
+		waitForElementVisibility(ar.getTxtPhoneNumbers().get(1));
+		setText(ar.getTxtPhoneNumbers().get(1),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalPhoneNumber1"));
+		setText(ar.getTxtPhoneExtn().get(1),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalPhoneNumberExtn1"));
+	}
+
+	@Then("^I click Apply Changes button in the Edit Modal$")
+	public void i_click_Apply_Changes_button_in_the_Edit_Modal() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getBtnApplyChanges());
+		pause(2000);
+		ar.waitForSuccessMessageToDisappear();
+	}
+
+	@Then("^I should see the changes \"([^\"]*)\" are updated in account list table$")
+	public void i_should_see_the_changes_are_updated_in_account_list_table(String fieldValues) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getBtnARAccountsThreeDots().get(0));
+		clickjs(ar.getBtnARAccountsThreeDots().get(0));
+		waitForElementVisibility(ar.getFirstEditLink());
+		clickjs(ar.getFirstEditLink());
+		waitForElementVisibility(ar.getTxtPhoneNumbers().get(1));
+	
+		try{
+		Assert.assertEquals(ar.getTxtPhoneNumbers().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalPhoneNumber1"));
+		Assert.assertEquals(ar.getTxtPhoneExtn().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalPhoneNumberExtn1"));
+		}catch(Exception e){
+		Assert.assertEquals(ar.getTxtPhoneNumber2().getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalPhoneNumber1"));
+		Assert.assertEquals(ar.getTxtPhoneExtn2().getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalPhoneNumberExtn1"));
+		}
+	}
+
+	@When("^I enter the mandatory fields to add new AR account \"([^\"]*)\"$")
+	public void i_enter_the_mandatory_fields_to_add_new_AR_account(String fieldDetails) {
+		AccountReceivable ar = new AccountReceivable();
+		clickjs(ar.getLnkCreatAccount());
+		setText(ar.getTxtAccountName(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("CompanyName"));
+		setText(ar.getTxtFirstName(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("FirstName"));
+		setText(ar.getTxtLastName(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("LastName"));
+		setText(ar.getFirstPhoneNumber(), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("PhoneNumber"));
+		setText(ar.getTxtStreetAddress().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Address"));
+		setText(ar.getTxtCity().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("City"));
+		setText(ar.getTxtState().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("State"));
+		setText(ar.getTxtPostalCode().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("PostalCode"));
+		setText(ar.getTxtCountry().get(0), ar.getData().get(Integer.parseInt(fieldDetails) - 1).get("Country"));
+		click(ar.getBtnAddAccount());
+	}
+
+	@When("^I choose the add address link and add address \"([^\"]*)\" in the Edit Modal$")
+	public void I_choose_the_add_address_link_and_add_address(String fieldValues) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getBtnARAccountsThreeDots().get(0));
+		click(ar.getBtnARAccountsThreeDots().get(0));
+		waitForElementVisibility(ar.getFirstEditLink());
+		click(ar.getFirstEditLink());
+		setText(ar.getTxtStreetAddress().get(0),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("Address"));
+		setText(ar.getTxtCity().get(0), ar.getData().get(Integer.parseInt(fieldValues) - 1).get("City"));
+		setText(ar.getTxtState().get(0), ar.getData().get(Integer.parseInt(fieldValues) - 1).get("State"));
+		setText(ar.getTxtPostalCode().get(0),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("PostalCode"));
+		setText(ar.getTxtCountry().get(0),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("Country"));
+		
+		click(ar.getLnkAddAddress());
+		setText(ar.getTxtStreetAddress().get(1),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalStreetAddress1"));
+		setText(ar.getTxtCity().get(1), ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalCity1"));
+		setText(ar.getTxtState().get(1), ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalState1"));
+		setText(ar.getTxtPostalCode().get(1),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalPostalCode1"));
+		setText(ar.getTxtCountry().get(1),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalCountry1"));
+	}
+
+	@Then("^I should see the changes \"([^\"]*)\" are updated in AR account list table$")
+	public void i_should_see_the_changes_are_updated_in_AR_account_list_table(String fieldValues) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getBtnARAccountsThreeDots().get(0));
+		click(ar.getBtnARAccountsThreeDots().get(0));
+		waitForElementVisibility(ar.getFirstEditLink());
+		click(ar.getFirstEditLink());
+		waitForElementVisibility(ar.getTxtStreetAddress().get(1));
+/*		*/
+		Assert.assertEquals(ar.getTxtStreetAddress().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("Address"));
+		Assert.assertEquals(ar.getTxtCity().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("City"));
+		Assert.assertEquals(ar.getTxtState().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("State"));
+		Assert.assertEquals(ar.getTxtPostalCode().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("PostalCode"));
+		Assert.assertEquals(ar.getTxtCountry().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("Country"));
+				
+		/*
+		Assert.assertEquals(ar.getTxtStreetAddress().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalStreetAddress1"));
+		Assert.assertEquals(ar.getTxtCity().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalCity1"));
+		Assert.assertEquals(ar.getTxtState().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalState1"));
+		Assert.assertEquals(ar.getTxtPostalCode().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalPostalCode1"));
+		Assert.assertEquals(ar.getTxtCountry().get(1).getAttribute("Value"),
+				ar.getData().get(Integer.parseInt(fieldValues) - 1).get("AdditionalCountry1"));
+				*/
+
+	}
+
+	@When("^I choose delivery method as Email \"([^\"]*)\"$")
+	public void i_choose_delivery_method_as_email(String deliveryMethod) {
+		AccountReceivable ar = new AccountReceivable();
+		selectByText(ar.getDdnDeliveryMethod(),
+				ar.getData().get(Integer.parseInt(deliveryMethod) - 1).get("Delivery Method"));
+	}
+
+	@Then("^The add button should not enabled$")
+	public void the_add_button_should_not_enabled() {
+		AccountReceivable ar = new AccountReceivable();
+		//Add button is always enabled now
+		Assert.assertTrue(ar.getBtnAddAccount().isEnabled());
+	}
+
+	@When("^I select hotel level as Chain$")
+	public void i_select_hotel_level_as_Chain() {
+		AccountReceivable ar = new AccountReceivable();
+		selectByText(ar.getDrpdwnHotelLevel(), "Chain");
+	}
+
+	@When("^I select hotel level as Brand$")
+	public void i_select_hotel_level_as_Brand() {
+		AccountReceivable ar = new AccountReceivable();
+		selectByText(ar.getDrpdwnHotelLevel(), "Brand");
+
+	}
+
+	@When("^I select hotel level as Hotel$")
+	public void i_select_hotel_level_as_Hotel() {
+		AccountReceivable ar = new AccountReceivable();
+		selectByText(ar.getDrpdwnHotelLevel(), "Hotel");
+	}
+
+	@Given("^I select account based on accountID$")
+	public void i_select_account_based_on_accountID() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.selectAccountFromAccountListTable(accountId);
+	}
+
+	@When("^I add charges for the account \"([^\"]*)\"$")
+	public void i_add_charges_for_the_account(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfCharges"));
+		ar.clickPostButton();
+		click(ar.getBtnBatchCharges());
+		waitForElementVisibility(ar.getDrpdwnFirstChargeType());
+		//selectByText(ar.getDrpdwnFirstChargeType(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType1"));
+		selectByIndex(ar.getDrpdwnFirstChargeType(), 1);
+		setText(ar.getFirstChargeAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount1"));
+		for (int i = 2; i <= count; i++) {
+			click(ar.lnkAddAnotherCharge());
+			/*selectByText(ar.getDrpdwnChargeTypes().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType" + i));*/
+			selectByIndex(ar.getDrpdwnChargeTypes().get(i - 1),1);
+			setText(ar.getChargeAmounts().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount" + i));
+		}
+
+	}
+
+	@When("^I click the post charges button$")
+	public void i_click_the_post_charges_button() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		clickjs(ar.getBtnPostCharges());
+		ar.waitForSuccessMessageToDisappear();
+	}
+
+	@Then("^Charges should be posted successfully$")
+	public void charges_should_be_posted_successfully() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertEquals(ar.getSuccessMessage().findElement(By.xpath("//div[2]")).getText(),
+				"Successfully Updated Account");
+
+	}
+
+	@Then("^I verify the account charges \"([^\"]*)\"$")
+	public void i_verify_the_account_charges(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		Assert.assertEquals(ar.getFirstRecordFromAccountListTable().get(7).getText(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("TotalCharges"));
+	}
+
+	@When("^I add payment for the account \"([^\"]*)\"$")
+	public void i_add_payment_for_the_account(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfPayments"));
+		ar.clickPostButton();
+		click(ar.getBtnSingleAccountPayment());
+		waitForElementVisibility(ar.getDrpdwnFirstPaymentType());
+		/*selectByText(ar.getDrpdwnFirstPaymentType(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentType1"));*/
+		selectByIndex(ar.getDrpdwnFirstPaymentType(),1);
+		setText(ar.getFirstPaymentAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentAmount1"));
+		for (int i = 2; i <= count; i++) {
+			click(ar.getLnkAddAnotherPayment());
+			selectByText(ar.getdrpdwnPaymentTypes().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentType" + i));
+			setText(ar.getPaymentAmounts().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentAmount" + i));
+		}
+	}
+
+	@When("^I click the post payment button$")
+	public void i_click_the_post_payment_button() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		clickjs(ar.getBtnPostPayment());
+		ar.waitForSuccessMessageToDisappear();
+	}
+
+	@When("^I verify the account payment \"([^\"]*)\"$")
+	public void i_verify_the_account_payment(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		Assert.assertEquals(ar.getFirstRecordFromAccountListTable().get(7).getText().replace("(-)", ""),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("TotalPayment"));
+	}
+
+	@Given("^I create an account in AR using \"([^\"]*)\" and \"([^\"]*)\"$")
+	public void i_create_an_account_in_AR_using_and(String property, String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		CommonSteps common = new CommonSteps();
+		//common.i_am_on_account_receivables_page(property);
+		i_navigate_to_create_account_section();
+		i_enter_the_mandatory_fields(fields);
+		i_click_the_add_button();
+		ar.waitForSuccessMessageToDisappear();
+		List<WebElement> FirstRow = ar.getFirstRecordFromAccountListTable();
+		accountId = FirstRow.get(2).getText();
+		accountID.add(FirstRow.get(2).getText());
+
+	}
+
+	@When("^I add single charge for the account \"([^\"]*)\"$")
+	public void i_add_single_charge_for_the_active_account(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		ar.selectAccountFromAccountListTable(accountId);
+		ar.clickPostButton();
+		click(ar.getBtnBatchCharges());
+		waitForElementVisibility(ar.getDrpdwnFirstChargeType());
+		//selectByText(ar.getDrpdwnFirstChargeType(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType1"));
+		selectByIndex(ar.getDrpdwnFirstChargeType(), 1);
+		setText(ar.getFirstChargeAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount1"));
+		clickjs(ar.getTxtIncludeRadio().get(0));
+	}
+
+	@Then("^The account balance\"([^\"]*)\" should be updated with posted charge$")
+	public void the_account_balance_should_be_updated_with_posted_charge(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		Assert.assertEquals(ar.getRowFromAccountListTable(accountId).get(7).getText(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("TotalCharges"));
+	}
+
+	@Given("^I create two accounts in AR using \"([^\"]*)\",\"([^\"]*)\" and \"([^\"]*)\"$")
+	public void i_create_two_accounts_in_AR_using_and(String property, String field1, String field2) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		i_create_an_account_in_AR_using_and(property, field1);
+		List<WebElement> FirstRow = ar.getFirstRecordFromAccountListTable();
+		accountId1 = FirstRow.get(2).getText();
+		i_navigate_to_create_account_section();
+		i_enter_the_mandatory_fields(field2);
+		i_click_the_add_button();
+		waitForElementVisibility(ar.getSuccessMessage());
+		ar.waitForSuccessMessageToDisappear();
+		accountId2 = FirstRow.get(2).getText();
+	}
+
+	@When("^I add single charge for the multiple accounts \"([^\"]*)\"$")
+	public void i_add_single_charge_for_the_multiple_active_accounts(String field1) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		ar.selectAccountFromAccountListTable(accountId1);
+		ar.selectAccountFromAccountListTable(accountId2);
+		ar.clickPostButton();
+		click(ar.getBtnBatchCharges());
+		waitForElementVisibility(ar.getDrpdwnFirstChargeType());
+		//selectByText(ar.getDrpdwnFirstChargeType(), ar.getData().get(Integer.parseInt(field1) - 1).get("ChargeType1"));
+		selectByIndex(ar.getDrpdwnFirstChargeType(), 1);
+		setText(ar.getFirstChargeAmount(), ar.getData().get(Integer.parseInt(field1) - 1).get("ChargeAmount1"));
+		clickjs(ar.getTxtIncludeRadio().get(0));
+	}
+
+	@Then("^All the accounts balance \"([^\"]*)\" should be updated with posted charge$")
+	public void all_the_accounts_balance_should_be_updated_with_posted_charge(String field1) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		Assert.assertEquals(ar.getRowFromAccountListTable(accountId1).get(7).getText(),
+				ar.getData().get(Integer.parseInt(field1) - 1).get("TotalCharges"));
+		Assert.assertEquals(ar.getRowFromAccountListTable(accountId2).get(7).getText(),
+				ar.getData().get(Integer.parseInt(field1) - 1).get("TotalCharges"));
+	}
+
+	@When("^I add multiple charges for the account \"([^\"]*)\"$")
+	public void i_add_multiple_charges_for_the_active_account(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfCharges"));
+		ar.selectAccountFromAccountListTable(accountId);
+		ar.clickPostButton();
+		click(ar.getBtnBatchCharges());
+		waitForElementVisibility(ar.getDrpdwnFirstChargeType());
+		//selectByText(ar.getDrpdwnFirstChargeType(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType1"));
+		selectByIndex(ar.getDrpdwnFirstChargeType(), 1);
+		setText(ar.getFirstChargeAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount1"));
+		clickjs(ar.getTxtIncludeRadio().get(0));
+		for (int i = 2; i <= count; i++) {
+			click(ar.lnkAddAnotherCharge());
+			/*selectByText(ar.getDrpdwnChargeTypes().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType" + i));*/
+			selectByIndex(ar.getDrpdwnChargeTypes().get(i - 1),1);
+			setText(ar.getChargeAmounts().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount" + i));
+			
+			clickjs(ar.getTxtIncludeRadio().get(i-1));
+		}
+	}
+
+	@When("^I add multiple charges for the multiple accounts \"([^\"]*)\"$")
+	public void i_add_multiple_charges_for_the_multiple_active_accounts(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfCharges"));
+		ar.waitForSuccessMessageToDisappear();
+		ar.selectAccountFromAccountListTable(accountId1);
+		ar.selectAccountFromAccountListTable(accountId2);
+		ar.clickPostButton();
+		click(ar.getBtnBatchCharges());
+		waitForElementVisibility(ar.getDrpdwnFirstChargeType());
+		//selectByText(ar.getDrpdwnFirstChargeType(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType1"));
+		selectByIndex(ar.getDrpdwnFirstChargeType(), 1);
+		setText(ar.getFirstChargeAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount1"));
+		clickjs(ar.getTxtIncludeRadio().get(0));
+		for (int i = 2; i <= count; i++) {
+			click(ar.lnkAddAnotherCharge());
+			/*selectByText(ar.getDrpdwnChargeTypes().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType" + i));*/
+			selectByIndex(ar.getDrpdwnChargeTypes().get(i - 1),1);
+			setText(ar.getChargeAmounts().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount" + i));
+			clickjs(ar.getTxtIncludeRadio().get(i-1));
+		}
+	}
+
+	@When("^I add single payment for the account \"([^\"]*)\"$")
+	public void i_add_single_paymet_for_the_active_account(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		ar.clickPostButton();
+		click(ar.getBtnSingleAccountPayment());
+		waitForElementVisibility(ar.getDrpdwnFirstPaymentType());
+		setText(ar.getFirstPaymentAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentAmount1"));
+		/*selectByText(ar.getDrpdwnFirstPaymentType(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentType1"));*/
+		selectByIndex(ar.getDrpdwnFirstPaymentType(),3);
+
+	}
+
+	@Then("^The account balance\"([^\"]*)\" should be updated with posted payment$")
+	public void the_account_balance_should_be_updated_with_posted_payment(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		Assert.assertEquals(ar.getFirstRecordFromAccountListTable().get(7).getText().replaceAll("[\\[\\](){}]", ""),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("TotalPayment"));
+	}
+
+	@Then("^The invoice should be generated to each posted charge in ledger page \"([^\"]*)\"$")
+	public void the_invoice_should_be_generated_to_each_posted_charge_in_ledger_page(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.goToLedgerPageForAnAccount(accountId);
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfCharges"));
+		List<String> actualBalance = ar.getListOfBalanceFromInvoiceListTable();
+
+		for (int i = 1; i <= count; i++) {
+			Assert.assertTrue(
+					actualBalance.contains(ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount" + i)));
+		}
+		List<WebElement> rows = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+		for (int i = 1; i < rows.size() - 1; i++) {
+			List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+			InvoiceListStatement.add(columns.get(0).getText());
+		}
+	}
+
+	@When("^I add multiple payment for the account \"([^\"]*)\"$")
+	public void i_add_multiple_payment_for_an_active_account(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfPayments"));
+		ar.selectAccountFromAccountListTable(accountId);
+		ar.clickPostButton();
+		click(ar.getBtnSingleAccountPayment());
+		waitForElementVisibility(ar.getDrpdwnFirstPaymentType());
+		/*selectByText(ar.getDrpdwnFirstPaymentType(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentType1"));*/
+		selectByIndex(ar.getDrpdwnFirstPaymentType(),1);
+		setText(ar.getFirstPaymentAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentAmount1"));
+		for (int i = 2; i <= count; i++) {
+			click(ar.getLnkAddAnotherPayment());
+			System.out.println("PaymentType" + i);
+			selectByText(ar.getdrpdwnPaymentTypes().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentType" + i));
+			setText(ar.getPaymentAmounts().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentAmount" + i));
+		}
+	}
+
+	@Given("^I create an inactive account in AR using \"([^\"]*)\" and \"([^\"]*)\"$")
+	public void i_create_an_inactive_account_in_AR_using_and(String property, String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		CommonSteps common = new CommonSteps();
+		//common.i_am_on_account_receivables_page(property);
+		i_navigate_to_create_account_section();
+		click(ar.getRdoInactive());
+		i_enter_the_mandatory_fields(fields);
+		i_click_the_add_button();
+		ar.waitForSuccessMessageToDisappear();
+		List<WebElement> FirstRow = ar.getFirstRecordFromAccountListTable();
+		accountId = FirstRow.get(2).getText();
+	}
+
+	@Then("^I should see the error message \"([^\"]*)\"$")
+	public void i_should_see_the_error_message(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		pause(3000);
+		System.out.println("Error message1:"+ar.getPaymentTypeErrorMessage().getText());
+		System.out.println("Error message2:"+ar.getpaymentAmountErrorMessage().getText());
+		
+		Assert.assertEquals(ar.getPaymentTypeErrorMessage().getText(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("ErrorMessage2"));
+		Assert.assertEquals(ar.getpaymentAmountErrorMessage().getText(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("ErrorMessage1"));
+	}
+	
+	@Then("^I should see the error message for Amount \"([^\"]*)\"$")
+	public void i_should_see_the_error_message_for_Amount(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		pause(3000);
+		
+		System.out.println("Error message2:"+ar.getpaymentAmountErrorMessage().getText());
+		
+		
+		Assert.assertEquals(ar.getpaymentAmountErrorMessage().getText(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("ErrorMessage1"));
+	}
+
+	@When("^I click single payment link$")
+	public void i_click_single_payment_link() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.clickPostButton();
+		click(ar.getBtnSingleAccountPayment());
+	}
+
+	@Given("^I create two inactive accounts in AR using \"([^\"]*)\",\"([^\"]*)\" and \"([^\"]*)\"$")
+	public void i_create_two_inactive_accounts_in_AR_using_and(String property, String field1, String field2)
+			throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		i_create_an_inactive_account_in_AR_using_and(property, field1);
+		List<WebElement> FirstRow = ar.getFirstRecordFromAccountListTable();
+		accountId1 = FirstRow.get(2).getText();
+		i_navigate_to_create_account_section();
+		click(ar.getRdoInactive());
+		i_enter_the_mandatory_fields(field2);
+		i_click_the_add_button();
+		waitForElementVisibility(ar.getSuccessMessage());
+		ar.waitForSuccessMessageToDisappear();
+		accountId2 = FirstRow.get(2).getText();
+	}
+
+	@When("^I navigate to ledger page for an account$")
+	public void i_navigate_to_ledger_page() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.goToLedgerPageForAnAccount(accountId);
+	}
+
+	@Then("^The invoice should be generated to each posted charge in ledger page to all selected accounts \"([^\"]*)\" and \"([^\"]*)\"$")
+	public void the_invoice_should_be_generated_to_each_posted_charge_in_ledger_page_to_all_selected_accounts(
+			String field1, String field2) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		PMSNavigationMenu menu = new PMSNavigationMenu();
+		ar.goToLedgerPageForAnAccount(accountId1);
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(field1) - 1).get("NumberOfCharges"));
+		List<String> actualBalance1 = ar.getListOfBalanceFromInvoiceListTable();
+		List<String> actualBalance2 = ar.getListOfBalanceFromInvoiceListTable();
+
+		for (int i = 1; i <= count; i++) {
+			Assert.assertTrue(
+					actualBalance1.contains(ar.getData().get(Integer.parseInt(field1) - 1).get("ChargeAmount" + i)));
+			List<WebElement> rows = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+			for (int j = 1; j < rows.size() - 1; j++) {
+				List<WebElement> columns = rows.get(j).findElements(By.tagName("td"));
+				InvoiceListStatement.add(columns.get(0).getText());
+			}
+		}
+
+		//menu.navigateToAccountReceivables();  /* Commented this code and using new one Moh
+		menu.navigateToAccountsReceivablePage();
+		ar.goToLedgerPageForAnAccount(accountId2);
+
+		for (int i = 1; i <= count; i++) {
+			Assert.assertTrue(
+					actualBalance2.contains(ar.getData().get(Integer.parseInt(field1) - 1).get("ChargeAmount" + i)));
+			List<WebElement> rows = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+			for (int j = 1; j < rows.size() - 1; j++) {
+				List<WebElement> columns = rows.get(j).findElements(By.tagName("td"));
+				InvoiceListStatement.add(columns.get(0).getText());
+			}
+		}
+	}
+
+	@Then("^The invoice should be generated to each posted payment in ledger page \"([^\"]*)\"$")
+	public void the_invoice_should_be_generated_to_each_posted_payment_in_ledger_page(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.goToLedgerPageForAnAccount(accountId);
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfPayments"));
+		List<String> actualBalance = ar.getListOfBalanceFromInvoiceListTable();
+
+		for (int i = 1; i <= count; i++) {
+			Assert.assertTrue(
+					actualBalance.contains(ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentAmount" + i)));
+		}
+
+	}
+
+	@When("^I search for an account$")
+	public void i_search_for_account_name() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getAccountListTableContent());
+		setText(ar.getAccountSearchBox(), accountId);
+		pause(5000);
+		ar.getAccountSearchBox().sendKeys(Keys.ENTER);
+		ar.waitForSearchResultToDisappear();
+	}
+
+	@When("^I post single charge in ledger page \"([^\"]*)\"$")
+	public void i_post_charge_in_ledger_page(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getInvoiceListTableContent());
+		ar.clickPostButton();
+		click(ar.getBtnBatchCharges());
+		waitForElementVisibility(ar.getDrpdwnFirstChargeType());
+		//selectByText(ar.getDrpdwnFirstChargeType(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType1"));
+		selectByIndex(ar.getDrpdwnFirstChargeType(), 1);
+		setText(ar.getFirstChargeAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount1"));
+	}
+
+	@When("^I post multiple charges in ledger page \"([^\"]*)\"$")
+	public void i_post_multiple_in_ledger_page(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfCharges"));
+		waitForElementVisibility(ar.getInvoiceListTableContent());
+		ar.clickPostButton();
+		click(ar.getBtnBatchCharges());
+		waitForElementVisibility(ar.getDrpdwnFirstChargeType());
+		//selectByText(ar.getDrpdwnFirstChargeType(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType1"));
+		selectByIndex(ar.getDrpdwnFirstChargeType(), 1);
+		setText(ar.getFirstChargeAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount1"));
+		for (int i = 2; i <= count; i++) {
+			System.out.println("CG:"+"ChargeAmount" + i);
+			clickjs(ar.lnkAddAnotherCharge());
+			/*selectByText(ar.getDrpdwnChargeTypes().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType" + i));*/
+			
+			selectByIndex(ar.getDrpdwnChargeTypes().get(i - 1),1);
+			setText(ar.getChargeAmounts().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount" + i));
+		}
+	}
+
+	@Then("^The invoice should be generated to the posted charge in ledger page \"([^\"]*)\"$")
+	public void the_invoice_should_be_generated_to_the_posted_charge_in_ledger_page(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfCharges"));
+		List<String> actualBalance = ar.getListOfBalanceFromInvoiceListTable();
+
+		for (int i = 1; i <= count; i++) {
+			Assert.assertTrue(
+					actualBalance.contains(ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount" + i)));
+		}
+	}
+
+	@Then("^I validate the account ID format \"([^\"]*)\"$")
+	public void i_validate_the_account_ID_format(String level) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		switch (level) {
+		case "chain":
+			Assert.assertTrue(ar.getFirstRecordFromAccountListTable().get(2).getText().contains("C"));
+			break;
+		case "brand":
+			Assert.assertTrue(ar.getFirstRecordFromAccountListTable().get(2).getText().contains("B"));
+			break;
+		case "hotel":
+			Assert.assertTrue(ar.getFirstRecordFromAccountListTable().get(2).getText().contains("H"));
+			break;
+		}
+	}
+
+	@When("^I setup cancel limit for the account \"([^\"]*)\"$")
+	public void i_setup_cancel_limit_for_the_account(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getFirstThreeDots());
+		click(ar.getFirstEditLink());
+		setText(ar.getTxtCancelLimit(), ar.getData().get(Integer.parseInt(fields) - 1).get("Cancel Limit"));
+
+	}
+
+	@When("^I setup credit limit for the account \"([^\"]*)\"$")
+	public void i_setup_credit_limit_for_the_account(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getFirstThreeDots());
+		click(ar.getFirstEditLink());
+		setText(ar.getTxtCreditLimit(), ar.getData().get(Integer.parseInt(fields) - 1).get("Credit Limit"));
+
+	}
+
+	@When("^I post single payment in ledger page \"([^\"]*)\"$")
+	public void i_post_payment_in_ledger_page(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getInvoiceListTableContent());
+		ar.clickPostButton();
+		click(ar.getBtnSingleAccountPayment());
+		waitForElementVisibility(ar.getDrpdwnFirstPaymentType());
+		setText(ar.getFirstPaymentAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentAmount1"));
+		/*selectByText(ar.getDrpdwnFirstPaymentType(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentType1"));*/
+		selectByIndex(ar.getDrpdwnFirstPaymentType(),1);
+		
+	}
+
+	@When("^I post multiple payment in ledger page \"([^\"]*)\"$")
+	public void i_post_multiple_payment_in_ledger_page(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfPayments"));
+		waitForElementVisibility(ar.getInvoiceListTableContent());
+		ar.clickPostButton();
+		click(ar.getBtnSingleAccountPayment());
+		waitForElementVisibility(ar.getDrpdwnFirstPaymentType());
+		setText(ar.getFirstPaymentAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentAmount1"));
+		/*selectByText(ar.getDrpdwnFirstPaymentType(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentType1"));*/
+		selectByIndex(ar.getDrpdwnFirstPaymentType(),1);
+		for (int i = 2; i <= count; i++) {
+			click(ar.getLnkAddAnotherPayment());
+			selectByText(ar.getdrpdwnPaymentTypes().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentType" + i));
+			setText(ar.getPaymentAmounts().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentAmount" + i));
+		}
+	}
+
+	@Then("^The invoice should be generated to the posted payment in ledger page \"([^\"]*)\"$")
+	public void the_invoice_should_be_generated_to_the_posted_payment_in_ledger_page(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfPayments"));
+		List<String> actualBalance = ar.getListOfBalanceFromInvoiceListTable();
+
+		for (int i = 1; i <= count; i++) {
+			Assert.assertTrue(
+					actualBalance.contains(ar.getData().get(Integer.parseInt(fields) - 1).get("PaymentAmount" + i)));
+		}
+	}
+
+	@When("^I enter optional fields \"([^\"]*)\"$")
+	public void i_enter_the_optional_fields(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+
+		setText(ar.getTxtCode(), ar.getData().get(Integer.parseInt(fields) - 1).get("Code"));
+		selectByText(ar.getDdnPreferredLanguage(),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("Preferred Language"));
+		setText(ar.getTxtEmail(), ar.getData().get(Integer.parseInt(fields) - 1).get("Email"));
+		setText(ar.getTxtWebsite(), ar.getData().get(Integer.parseInt(fields) - 1).get("Website"));
+		selectByText(ar.getDdnRating(), ar.getData().get(Integer.parseInt(fields) - 1).get("Rating"));
+		selectByText(ar.getDdnBillingCycle(), ar.getData().get(Integer.parseInt(fields) - 1).get("Billing Cycle"));
+		selectByText(ar.getDdnDeliveryMethod(), ar.getData().get(Integer.parseInt(fields) - 1).get("Delivery Method"));
+		setText(ar.getTxtCreditLimit(), ar.getData().get(Integer.parseInt(fields) - 1).get("Credit Limit"));
+		setText(ar.getTxtCancelLimit(), ar.getData().get(Integer.parseInt(fields) - 1).get("Cancel Limit"));
+
+		for (int i = 0; i < 5; i++) {
+			click(ar.getLnkAddPhoneNumber());
+			click(ar.getLnkAddAddress());
+			setText(driver.findElement(By.name("phoneNumber" + i)),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("PhoneNumber"));
+			selectByIndex(driver.findElement(By.name("phoneType" + i)), 5 - i);
+			setText(driver.findElement(By.name("phoneExtn" + i)),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("Extension"));
+			setText(driver.findElement(By.name("addressLine" + i)),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("Address"));
+			setText(driver.findElement(By.name("addressCity" + i)),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("City"));
+			setText(driver.findElement(By.name("addressState" + i)),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("State"));
+			setText(driver.findElement(By.name("addressPostalCode" + i)),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("PostalCode"));
+			setText(driver.findElement(By.name("accountCountry" + i)),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("Country"));
+
+		}
+		click(ar.getBtnAdd());
+	}
+
+	@Then("^I should see the cancel limit is updated \"([^\"]*)\"$")
+	public void i_should_see_the_cancel_limit_is_updated(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getFirstThreeDots());
+		click(ar.getFirstEditLink());
+		Assert.assertEquals(getValue(ar.getTxtCancelLimit()),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("Cancel Limit"));
+	}
+
+	@Then("^I should see the credit limit is updated \"([^\"]*)\"$")
+	public void i_should_see_the_credit_limit_is_updated(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getFirstThreeDots());
+		click(ar.getFirstEditLink());
+		Assert.assertEquals(getValue(ar.getTxtCreditLimit()),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("Credit Limit"));
+		click(ar.getBtnCancel());
+		ar.waitForAccountIDToVisible(accountId);
+	}
+
+	@Then("^I verify the optional fields \"([^\"]*)\"$")
+	public void i_verify_the_optional_fields(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		waitForElementClickable(ar.getFirstThreeDots());
+		clickjs(ar.getFirstThreeDots());
+		waitForElementVisibility(ar.getFirstEditLink());
+		click(ar.getFirstEditLink());
+		Assert.assertEquals(getValue(ar.getTxtCode()), ar.getData().get(Integer.parseInt(fields) - 1).get("Code"));
+		Assert.assertEquals(dropDownSelectedValue(ar.getDdnPreferredLanguage()),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("Preferred Language"));
+		Assert.assertEquals(getValue(ar.getTxtEmail()), ar.getData().get(Integer.parseInt(fields) - 1).get("Email"));
+		Assert.assertEquals(getValue(ar.getTxtWebsite()),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("Website"));
+		Assert.assertEquals(dropDownSelectedValue(ar.getDdnRating()),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("Rating"));
+		/*Assert.assertEquals(dropDownSelectedValue(ar.getDdnBillingCycle()),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("Billing Cycle"));*/
+		Assert.assertEquals(dropDownSelectedValue(ar.getDdnDeliveryMethod()),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("Delivery Method"));
+		Assert.assertEquals(getValue(ar.getTxtCreditLimit()),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("Credit Limit"));
+		Assert.assertEquals(getValue(ar.getTxtCancelLimit()),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("Cancel Limit"));
+
+	}
+
+	@When("^I apply payment for the charges \"([^\"]*)\"$")
+	public void i_apply_payment_for_the_charges(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfCharges"));
+		ar.waitForSuccessMessageToDisappear();
+		waitForElementClickable(ar.getBtnARAccountsThreeDots().get(0));
+		clickjs(ar.getBtnARAccountsThreeDots().get(0));
+		waitForElementClickable(ar.getBtnApplyPayments().get(0));
+		clickjs(ar.getBtnApplyPayments().get(0));
+		pause(2000);
+		for (int i = 1; i <= count; i++) {
+			ar.singleSelectAndApplyPaymentFromLedgerPage(ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount" + i));
+		}
+		clickjs(ar.getBtnHeaderApplyPayment());
+		ar.waitForSuccessMessageToDisappear();
+	}
+
+	@When("^I click archieve invoices link from ledger page$")
+	public void i_click_archieve_invoice_link() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getlnkArchieveInvoicesLedger());
+		clickjs(ar.getlnkArchieveInvoicesLedger());
+		waitForElementVisibility(ar.getBtnPopupYesArchieve());
+		click(ar.getBtnPopupYesArchieve());
+	}
+
+	@When("^I click view archieved invoices link$")
+	public void i_click_view_archieved_invoice_link() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementClickable(ar.getlnkViewArchievedInvoices());
+		click(ar.getlnkViewArchievedInvoices());
+	}
+
+	@Then("^I verify the archieved invoices \"([^\"]*)\"$")
+	public void i_verify_the_archieved_invoices(String arg1) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementTodisappear(ar.lnkViewArchievedInvoicesBy);
+		Assert.assertEquals(ar.getInvoiceListTableContent().findElements(By.tagName("th")).get(2).getText(),
+				"DATE ARCHIVED");
+		List<WebElement> rows = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+		for (int i = 1; i < rows.size(); i++) {
+			List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+			InvoiceListAfter.add(columns.get(0).getText());
+		}
+		for (int k = 0; k < InvoiceListBefore.size(); k++) {
+			Assert.assertTrue(InvoiceListAfter.contains(InvoiceListBefore.get(k)));
+
+		}
+	}
+
+	@Given("^I navigate to account recievables page$")
+	public void i_navigate_to_account_recievables_page() throws Throwable {
+		PMSNavigationMenu menu = new PMSNavigationMenu();
+		menu.navigateToAccountReceivables();
+	}
+
+	@Then("^I verify the payment appplied \"([^\"]*)\"$")
+	public void i_verify_the_payment_applied(String arg1) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertEquals(getText(ar.getOutstandingBalance()), "0.00");
+		List<WebElement> rows = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+		for (int i = 1; i < rows.size() - 1; i++) {
+			List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+			Assert.assertEquals(columns.get(7).getText().replaceAll("[\\[\\](){}]", ""), "0.00");
+			InvoiceListBefore.add(columns.get(0).getText());
+		}
+	}
+
+	@When("^I select all and apply payment for the charges \"([^\"]*)\"$")
+	public void i_select_all_apply_payment_for_the_charges(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfCharges"));
+		ar.waitForSuccessMessageToDisappear();
+		waitForElementClickable(ar.getBtnARAccountsThreeDots().get(0));
+		clickjs(ar.getBtnARAccountsThreeDots().get(0));
+		waitForElementClickable(ar.getBtnApplyPayments().get(0));
+		clickjs(ar.getBtnApplyPayments().get(0));
+		click(ar.getInvoiceListTableContentCheckBox().findElements(By.tagName("th")).get(0));
+		for (int i = 1; i <= count; i++) {
+			ar.selectAllAndApplyPaymentFromLedgerPage(
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount" + i));
+		}
+		waitForElementClickable(ar.getBtnHeaderApplyPayment());
+		clickjs(ar.getBtnHeaderApplyPayment());
+		ar.waitForSuccessMessageToDisappear();
+	}
+
+	@When("^the credit limit warning should be displayed$")
+	public void the_credit_limit_warning_should_be_displayed() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertTrue(ar.getCreditLimitWarning().isDisplayed());
+	}
+
+	@When("^the credit limit warning should not be displayed$")
+	public void the_credit_limit_warning_should_notbe_displayed() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertFalse(ar.getCreditLimitWarning().isDisplayed());
+	}
+
+	@When("^I click archieve invoices link from accounts page$")
+	public void i_click_archieve_invoices_link_from_account_page() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		clickjs(ar.getArchiveInvoicesAccount());
+	}
+
+	@Then("^I verify the archieved invoices$")
+	public void i_verify_the_archieved_invoices() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		PMSNavigationMenu menu = new PMSNavigationMenu();
+		for (int i = 0; i < accountID.size(); i++) {
+			ar.goToLedgerPageForAnAccount(accountID.get(i));
+			waitForElementVisibility(ar.getlnkViewArchievedInvoices());
+			Assert.assertEquals(getText(ar.getInvoiceTableHeader()), "0 Invoices");
+			click(ar.getlnkViewArchievedInvoices());
+			waitForElementTodisappear(ar.lnkViewArchievedInvoicesBy);
+			Assert.assertEquals(ar.getInvoiceListTableContent().findElements(By.tagName("th")).get(2).getText(),
+					"DATE ARCHIVED");
+			List<WebElement> rows = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+			for (int j = 1; j < rows.size(); j++) {
+				List<WebElement> columns = rows.get(j).findElements(By.tagName("td"));
+				InvoiceListAfter.add(columns.get(0).getText());
+			}
+			menu.navigateToAccountReceivables();
+		}
+		for (int k = 0; k < InvoiceListBefore.size(); k++) {
+			Assert.assertTrue(InvoiceListAfter.contains(InvoiceListBefore.get(k)));
+
+		}
+	}
+
+	@Given("^I select multiple accounts from accounts page$")
+	public void i_select_multiple_accounts() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		for (int i = 0; i < accountID.size(); i++) {
+			ar.selectAccountFromAccountListTable(accountID.get(i));
+		}
+	}
+
+	@When("^I select account status as \"([^\"]*)\"$")
+	public void i_select_account_status_as(String status) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getAccountListTableContent());
+		click(ar.getFilter());
+		pause(5000);
+		switch (status) {
+		case "Active":
+			click(ar.getAccountsPageFilterActive());
+			pause(5000);
+			break;
+		case "Inactive":
+			click(ar.getAccountsPageFilterInactive());
+			pause(5000);
+			break;
+
+		}
+
+	}
+
+	@Then("^I verify the \"([^\"]*)\" account from accounts table$")
+	public void i_verify_the_account_from_accounts_table(String status) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getFirstThreeDots());
+		click(ar.getFirstEditLink());
+		waitForElementVisibility(ar.getTxtAccountName());
+		switch (status) {
+		case "Active":
+			Assert.assertTrue(ar.getRdoActive().isSelected());
+			break;
+		case "Inactive":
+			Assert.assertTrue(ar.getRdoInactive().isSelected());
+			break;
+		}
+	}
+
+	@Then("^I verify the pagenation previuos button$")
+	public void i_verify_the_pagenation_previuos_button() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertTrue(true, ar.getlnkAccountsPagePrevious().getAttribute("disabled"));
+
+	}
+
+	@When("^I click the last page of accounts page$")
+	public void i_am_in_last_page_of_accounts_page() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		List<WebElement> pages = ar.getlnkAccountsTotalPages();
+		int pageCount = pages.size() - 1;
+		click(pages.get(pageCount));
+	}
+
+	@Then("^I verify the pagenation next button$")
+	public void i_verify_the_pagenation_next_button() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertTrue(true, ar.getlnkAccountsPageNext().getAttribute("disabled"));
+		try {
+			ar.getlnkAccountsPagePrevious().getAttribute("disabled");
+		} catch (NullPointerException e) {
+			Assert.assertTrue(true);
+		}
+	}
+
+	@When("^I apply filter in ledger page \"([^\"]*)\"$")
+	public void i_apply_filter_in_ledger_page(String status) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		String[] currentDate = getCurrentDate().split("-");
+		clickjs(ar.getFilter());
+		pause(5000);
+		switch (status) {
+		case "open":
+			click(ar.getLedgerFilterOpen());
+			pause(5000);
+			break;
+		case "closed":
+			click(ar.getLedgerFilterClosed());
+			pause(5000);
+			break;
+
+		case "currentDate":
+			setText(ar.getFilterStartDay(), currentDate[2]);
+			setText(ar.getFilterStartMonth(), currentDate[1]);
+			setText(ar.getFilterStartYear(), currentDate[0]);
+			setText(ar.getFilterEndDay(), currentDate[2]);
+			setText(ar.getFilterEndMonth(), currentDate[1]);
+			setText(ar.getFilterEndYear(), currentDate[0]);
+			click(ar.getLedgerFilterAll());
+			break;
+
+		case "pastDate":
+			int pastDay = (Integer.valueOf(currentDate[2])) - 1;
+			setText(ar.getFilterStartDay(), String.valueOf(pastDay));
+			setText(ar.getFilterStartMonth(), currentDate[1]);
+			setText(ar.getFilterStartYear(), currentDate[0]);
+			setText(ar.getFilterEndDay(), String.valueOf(pastDay));
+			setText(ar.getFilterEndMonth(), currentDate[1]);
+			setText(ar.getFilterEndYear(), currentDate[0]);
+			click(ar.getLedgerFilterAll());
+			pause(5000);
+			break;
+		}
+
+	}
+
+	@Then("^I verify the \"([^\"]*)\" invoices$")
+	public void i_verify_the_invoices(String status) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		List<WebElement> rows = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+		switch (status) {
+		case "open":
+			for (int i = 1; i < rows.size() - 1; i++) {
+				List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+				Assert.assertNotEquals(columns.get(7).getText().replaceAll("[\\[\\](){}]", ""), "0.00");
+			}
+			break;
+		case "closed":
+			for (int i = 1; i < rows.size() - 1; i++) {
+				List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+				Assert.assertEquals(columns.get(7).getText().replaceAll("[\\[\\](){}]", ""), "0.00");
+			}
+			break;
+
+		case "currentDate":
+			String invoiceExpectedDate = getCurrentDateMMMDDYYYY();
+			for (int i = 1; i < rows.size() - 1; i++) {
+				List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+				Assert.assertEquals(columns.get(2).getText().trim(), invoiceExpectedDate);
+			}
+			break;
+		case "pastDate":
+			Assert.assertEquals(getText(ar.getInvoiceTableHeader()), "0 Invoices");
+			break;
+
+		}
+	}
+
+	@When("^I post \"([^\"]*)\" charges in ledger page \"([^\"]*)\"$")
+	public void i_post_charges_in_ledger_page(String arg1, String fields) throws Throwable {
+
+		AccountReceivable ar = new AccountReceivable();
+		int count = Integer.parseInt(arg1);
+		pause(3000);
+		ar.clickPostButton();
+		clickjs(ar.getBtnBatchCharges());
+		waitForElementVisibility(ar.getDrpdwnFirstChargeType());
+		//selectByText(ar.getDrpdwnFirstChargeType(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType1"));
+		selectByIndex(ar.getDrpdwnFirstChargeType(), 1);
+		setText(ar.getFirstChargeAmount(), ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount1"));
+		for (int i = 2; i <= count; i++) {
+			clickjs(ar.lnkAddAnotherCharge());
+			/*selectByText(ar.getDrpdwnChargeTypes().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeType2"));*/
+			selectByIndex(ar.getDrpdwnChargeTypes().get(i - 1),2);
+			setText(ar.getChargeAmounts().get(i - 1),
+					ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount2"));
+		}
+	}
+
+	@When("^I apply payment for the selected charges \"([^\"]*)\"$")
+	public void i_apply_payment_for_the_selected_charges(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.waitForSuccessMessageToDisappear();
+		List<WebElement> rows = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+		waitForElementClickable(ar.getBtnARAccountsThreeDots().get(0));
+		clickjs(ar.getBtnARAccountsThreeDots().get(0));
+		waitForElementClickable(ar.getBtnApplyPayments().get(0));
+		clickjs(ar.getBtnApplyPayments().get(0));
+		click(ar.getInvoiceListTableContentCheckBox().findElements(By.tagName("tr")).get(2));
+		List<WebElement> columns1 = rows.get(2).findElements(By.tagName("td"));
+		setText(columns1.get(7).findElement(By.tagName("input")),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount1"));
+		click(ar.getInvoiceListTableContentCheckBox().findElements(By.tagName("tr")).get(5));
+		List<WebElement> columns2 = rows.get(5).findElements(By.tagName("td"));
+		setText(columns2.get(7).findElement(By.tagName("input")),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount1"));
+		click(ar.getlnkAccountsPageNext());
+		pause(5000);
+		click(ar.getInvoiceListTableContentCheckBox().findElements(By.tagName("tr")).get(2));
+		List<WebElement> rows2 = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+		List<WebElement> columns3 = rows2.get(2).findElements(By.tagName("td"));
+		setText(columns3.get(7).findElement(By.tagName("input")),
+				ar.getData().get(Integer.parseInt(fields) - 1).get("ChargeAmount1"));
+		waitForElementClickable(ar.getBtnHeaderApplyPayment());
+		clickjs(ar.getBtnHeaderApplyPayment());
+		ar.waitForSuccessMessageToDisappear();
+	}
+
+	@Then("^I verify the payment appplied to the selected charges \"([^\"]*)\"$")
+	public void i_verify_the_payment_appplied_to_the_selected_charges(String arg1) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getFilter());
+		pause(5000);
+		click(ar.getLedgerFilterClosed());
+		pause(5000);
+		List<WebElement> rows = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+	      //	for (int i = 1; i < rows.size() - 1; i++) {
+			List<WebElement> columns = rows.get(2).findElements(By.tagName("td"));
+			Assert.assertEquals(columns.get(8).getText().replaceAll("[\\[\\](){}]", ""), "0.00");
+		}
+
+
+	@When("^I verify the invoice ID generation format$")
+	public void I_verify_the_invoice_ID_generation_format() throws Throwable {
+		Assert.assertEquals(InvoiceListBefore.get(0).length(), 11);
+		Assert.assertTrue(InvoiceListBefore.get(0).startsWith("10000"));
+	}
+
+	@When("^I click on Statement and Reminder Template link$")
+	public void i_click_on_configuration_link() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getAccountListTableContent());
+		ar.clickStatementReminderTemplate();
+	}
+
+	@Then("^I verify the mandatory fields$")
+	public void i_verify_the_mandatory_fields() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertTrue(true, ar.getHotelContactName_in_chk().getAttribute("checked"));
+		Assert.assertTrue(true, ar.getHotelContactName_in_chk().getAttribute("disabled"));
+
+		Assert.assertTrue(true, ar.getHotelBusinessPhnNumber_in_chk().getAttribute("checked"));
+		Assert.assertTrue(true, ar.getHotelBusinessPhnNumber_in_chk().getAttribute("disabled"));
+
+		Assert.assertTrue(true, ar.getAcctCompanyName_in_chk().getAttribute("disabled"));
+		Assert.assertTrue(true, ar.getAcctCompanyName_in_chk().getAttribute("checked"));
+
+		Assert.assertTrue(true, ar.getAcctContactName_in_chk().getAttribute("disabled"));
+		Assert.assertTrue(true, ar.getAcctContactName_in_chk().getAttribute("checked"));
+
+		Assert.assertTrue(true, ar.getAcctAddress_in_chk().getAttribute("disabled"));
+		Assert.assertTrue(true, ar.getAcctAddress_in_chk().getAttribute("checked"));
+
+		Assert.assertTrue(true, ar.getLedgerInvoiceNumber_in_chk().getAttribute("disabled"));
+		Assert.assertTrue(true, ar.getLedgerInvoiceNumber_in_chk().getAttribute("checked"));
+
+		Assert.assertTrue(true, ar.getLedgerAccountNumber_in_chk().getAttribute("disabled"));
+		Assert.assertTrue(true, ar.getLedgerAccountNumber_in_chk().getAttribute("checked"));
+
+		Assert.assertTrue(true, ar.getLedgerGuestName_in_chk().getAttribute("disabled"));
+		Assert.assertTrue(true, ar.getLedgerGuestName_in_chk().getAttribute("checked"));
+
+		Assert.assertTrue(true, ar.getLedgerCreationDate_in_chk().getAttribute("disabled"));
+		Assert.assertTrue(true, ar.getLedgerCreationDate_in_chk().getAttribute("checked"));
+
+		Assert.assertTrue(true, ar.getLedgerLastStatementDate_in_chk().getAttribute("disabled"));
+		Assert.assertTrue(true, ar.getLedgerLastStatementDate_in_chk().getAttribute("checked"));
+	}
+
+	@When("^I select all the optional fields in template$")
+	public void i_select_all_the_optional_fields() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		if (!ar.getHotelLogo().isSelected())
+			click(ar.getHotelLogo());
+		if (!ar.getHotelCode_in_chk().isSelected())
+			click(ar.getHotelCode_in_chk());
+		if (!ar.getHotelName_in_chk().isSelected())
+			click(ar.getHotelName_in_chk());
+		if (!ar.getHotelContactEmail_in_chk().isSelected())
+			click(ar.getHotelContactEmail_in_chk());
+		if (!ar.getHotelContactHome_in_chk().isSelected())
+			click(ar.getHotelContactHome_in_chk());
+		if (!ar.getHotelContactMobile_in_chk().isSelected())
+			click(ar.getHotelContactMobile_in_chk());
+		if (!ar.getHotelFax_in_chk().isSelected())
+			click(ar.getHotelFax_in_chk());
+		if (!ar.getHotelContactOther_in_chk().isSelected())
+			click(ar.getHotelContactOther_in_chk());
+		if (!ar.getHotelId_in_chk().isSelected())
+			click(ar.getHotelId_in_chk());
+		if (!ar.getHotelAddress_in_chk().isSelected())
+			click(ar.getHotelAddress_in_chk());
+		if (!ar.getHotelCountry_in_chk().isSelected())
+			click(ar.getHotelCountry_in_chk());
+		if (!ar.getAcctCompanyWebsite_in_chk().isSelected())
+			click(ar.getAcctCompanyWebsite_in_chk());
+		if (!ar.getAcctContactEmail_in_chk().isSelected())
+			click(ar.getAcctContactEmail_in_chk());
+		if (!ar.getAcctBusinessPhnNumber_in_chk().isSelected())
+			click(ar.getAcctBusinessPhnNumber_in_chk());
+		if (!ar.getAcctCountry_in_chk().isSelected())
+			click(ar.getAcctCountry_in_chk());
+
+		setText(ar.getStatementText_in_txt(), "Statement text");
+		setText(ar.getstatement_footer_in_txt(), "Statement footer text");
+		setText(ar.getReminderText_in_txt(), "Reminder text");
+		setText(ar.getReminderFooterText_in_txt(), "Reminder footer text");
+
+	}
+
+	@When("^I save the template$")
+	public void i_save_the_template() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getSave_btn());
+		ar.waitForSuccessMessageToDisappear();
+	}
+
+	@Then("^I verify the saved template for mandatory fields$")
+	public void i_verify_the_saved_template() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.clickStatementReminderTemplate();
+
+		Assert.assertFalse(ar.getHotelLogo().isSelected());
+		Assert.assertFalse(ar.getHotelCode_in_chk().isSelected());
+		Assert.assertFalse(ar.getHotelName_in_chk().isSelected());
+		Assert.assertFalse(ar.getHotelContactEmail_in_chk().isSelected());
+		Assert.assertFalse(ar.getHotelContactHome_in_chk().isSelected());
+		Assert.assertFalse(ar.getHotelContactMobile_in_chk().isSelected());
+		Assert.assertFalse(ar.getHotelFax_in_chk().isSelected());
+		Assert.assertFalse(ar.getHotelContactOther_in_chk().isSelected());
+		Assert.assertFalse(ar.getHotelId_in_chk().isSelected());
+		Assert.assertFalse(ar.getHotelAddress_in_chk().isSelected());
+		Assert.assertFalse(ar.getHotelCountry_in_chk().isSelected());
+		Assert.assertFalse(ar.getAcctCompanyWebsite_in_chk().isSelected());
+		Assert.assertFalse(ar.getAcctContactEmail_in_chk().isSelected());
+		Assert.assertFalse(ar.getAcctBusinessPhnNumber_in_chk().isSelected());
+		Assert.assertFalse(ar.getAcctCountry_in_chk().isSelected());
+
+	}
+
+	@When("^I unselect all the optional fields in template$")
+	public void i_unselect_all_the_optional_fields() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		if (ar.getHotelLogo().isSelected())
+			click(ar.getHotelLogo());
+		if (ar.getHotelCode_in_chk().isSelected())
+			click(ar.getHotelCode_in_chk());
+		if (ar.getHotelName_in_chk().isSelected())
+			click(ar.getHotelName_in_chk());
+		if (ar.getHotelContactEmail_in_chk().isSelected())
+			click(ar.getHotelContactEmail_in_chk());
+		if (ar.getHotelContactHome_in_chk().isSelected())
+			click(ar.getHotelContactHome_in_chk());
+		if (ar.getHotelContactMobile_in_chk().isSelected())
+			click(ar.getHotelContactMobile_in_chk());
+		if (ar.getHotelFax_in_chk().isSelected())
+			click(ar.getHotelFax_in_chk());
+		if (ar.getHotelContactOther_in_chk().isSelected())
+			click(ar.getHotelContactOther_in_chk());
+		if (ar.getHotelId_in_chk().isSelected())
+			click(ar.getHotelId_in_chk());
+		if (ar.getHotelAddress_in_chk().isSelected())
+			click(ar.getHotelAddress_in_chk());
+		if (ar.getHotelCountry_in_chk().isSelected())
+			click(ar.getHotelCountry_in_chk());
+		if (ar.getAcctCompanyWebsite_in_chk().isSelected())
+			click(ar.getAcctCompanyWebsite_in_chk());
+		if (ar.getAcctContactEmail_in_chk().isSelected())
+			click(ar.getAcctContactEmail_in_chk());
+		if (ar.getAcctBusinessPhnNumber_in_chk().isSelected())
+			click(ar.getAcctBusinessPhnNumber_in_chk());
+		if (ar.getAcctCountry_in_chk().isSelected())
+			click(ar.getAcctCountry_in_chk());
+
+		clearTextBox(ar.getStatementText_in_txt());
+		clearTextBox(ar.getstatement_footer_in_txt());
+		clearTextBox(ar.getReminderText_in_txt());
+		clearTextBox(ar.getReminderFooterText_in_txt());
+
+	}
+
+	@Then("^I verify the saved template for optional fields$")
+	public void i_verify_the_saved_template_optional() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.clickStatementReminderTemplate();
+
+		Assert.assertTrue(ar.getHotelLogo().isSelected());
+		Assert.assertTrue(ar.getHotelCode_in_chk().isSelected());
+		Assert.assertTrue(ar.getHotelName_in_chk().isSelected());
+		Assert.assertTrue(ar.getHotelContactEmail_in_chk().isSelected());
+		Assert.assertTrue(ar.getHotelContactHome_in_chk().isSelected());
+		Assert.assertTrue(ar.getHotelContactMobile_in_chk().isSelected());
+		Assert.assertTrue(ar.getHotelFax_in_chk().isSelected());
+		Assert.assertTrue(ar.getHotelContactOther_in_chk().isSelected());
+		Assert.assertTrue(ar.getHotelId_in_chk().isSelected());
+		Assert.assertTrue(ar.getHotelAddress_in_chk().isSelected());
+		Assert.assertTrue(ar.getHotelCountry_in_chk().isSelected());
+		Assert.assertTrue(ar.getAcctCompanyWebsite_in_chk().isSelected());
+		Assert.assertTrue(ar.getAcctContactEmail_in_chk().isSelected());
+		Assert.assertTrue(ar.getAcctBusinessPhnNumber_in_chk().isSelected());
+		Assert.assertTrue(ar.getAcctCountry_in_chk().isSelected());
+
+	}
+
+	@When("^I select adress type as \"([^\"]*)\"$")
+	public void i_select_adress_type_as(String adressType) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		switch (adressType) {
+		case "Bussiness":
+			click(ar.getAcctBusinessAddr_in_rdo());
+			break;
+		case "Fiscal":
+			click(ar.getAcctFiscalAddr_in_rdo());
+			break;
+		case "Other":
+			click(ar.getAcctOtherAddr_in_rdo());
+
+		}
+	}
+
+	@Then("^I verify the saved template for adress type \"([^\"]*)\"$")
+	public void i_verify_the_saved_template_for_adress_type(String adressType) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		switch (adressType) {
+		case "Bussiness":
+			Assert.assertTrue(ar.getAcctBusinessAddr_in_rdo().isSelected());
+			break;
+		case "Fiscal":
+			Assert.assertTrue(ar.getAcctFiscalAddr_in_rdo().isSelected());
+			break;
+		case "Other":
+			Assert.assertTrue(ar.getAcctOtherAddr_in_rdo().isSelected());
+
+		}
+	}
+
+	@When("^I navigate to create statment section$")
+	public void i_navigate_to_create_statment_section() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getLnkCreateStatement());
+	}
+
+	@When("^I navigate to create reminder letter section$")
+	public void i_navigate_to_create_reminder_letter_section() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getLnkCreateReminderLetter());
+	}
+
+	@Then("^I verify the invoice count for the statement \"([^\"]*)\"$")
+	public void i_verify_invoice_count_statement(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getInvoiceCountforTemplate());
+		int count = Integer.parseInt(ar.getData().get(Integer.parseInt(fields) - 1).get("NumberOfCharges"));
+		System.out.println("Invoice:"+getText(ar.getInvoiceCountforTemplate()));
+		System.out.println("count:"+count + " Invoices");
+		
+		Assert.assertTrue((getText(ar.getInvoiceCountforTemplate()).contains(count + " Invoices")));
+
+		waitForElementVisibility(ar.getInvoiceListTableContent());
+		List<WebElement> rows = ar.getInvoiceListTableContent().findElements(By.tagName("tr"));
+		for (int i = 1; i < rows.size() - 1; i++) {
+			List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+			Assert.assertTrue(InvoiceListStatement.contains(columns.get(0).getText()));
+		}
+	}
+
+	@When("^I click Continue button for statement$")
+	public void i_click_Continue_button_for_statement() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		clickjs(ar.getContinueStatement());
+	}
+
+	@When("^I verify the create statement popup$")
+	public void i_verify_the_statement_popup() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertEquals(getText(ar.getSend_reminder_statement_modal().findElement(By.tagName("h4"))),
+				"Create Statement");
+	}
+
+	@When("^I verify the reminder letter popup$")
+	public void i_verify_the_reminder_popup() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertEquals(getText(ar.getSend_reminder_statement_modal().findElement(By.tagName("h4"))),
+				"Create Reminder Letter");
+	}
+
+	@When("^I select multiple accounts based on accountID$")
+	public void i_select_multiple_accounts_based_on_accountID() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.selectAccountFromAccountListTable(accountId1);
+		ar.selectAccountFromAccountListTable(accountId2);
+	}
+
+	@When("^I search with text or number \"([^\"]*)\"$")
+	public void i_search_with_text_or_number(String fields) throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		setText(ar.getAccountSearchBox(), ar.getData().get(Integer.parseInt(fields) - 1).get("CompanyName"));
+	}
+
+	@Then("^I should see the search results in accounts table$")
+	public void i_should_see_the_search_results() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertTrue(ar.getAccountListTableContent().isDisplayed());
+	}
+
+	@When("^I click search icon$")
+	public void i_click_search_icon() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getBtnSearchIcon());
+		pause(5000);
+	}
+
+	@When("^I should see the error message in search results page$")
+	public void i_should_see_the_error_message() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertEquals(getText(ar.getSearchNoRecordFound()), "No Records Found");
+	}
+
+	@When("^I click single charge link$")
+	public void i_click_single_charge_link() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		ar.clickPostButton();
+		click(ar.getBtnBatchCharges());
+	}
+
+	@When("^I click send button for statement$")
+	public void i_click_send_button_for_statement() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getBtnSendStatement());
+	}
+
+	@Then("^I verify the error message1 on popup$")
+	public void i_verify_error_message1() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertEquals(getText(ar.getPostChargesError()), "Please select either email or print");
+	}
+
+	@Then("^I verify the error message2 on popup$")
+	public void i_verify_error_message2() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		Assert.assertEquals(getText(ar.getPostChargesError()), "One or more account(s) does not have open invoices");
+	}
+
+	@When("^I select email checkbox for statement$")
+	public void i_select_email_for_statement() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		click(ar.getChk_EmailStatement());
+	}
+	
+	@Then("^I click on create an account$")
+	public void I_click_on_create_an_account() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.getlnkCreateARAccount());
+		click(ar.getlnkCreateARAccount());
+	}
+	
+	@Then("^I validate Add AR Account modal is displayed$")
+	public void I_validate_Add_AR_Account_modal_is_displayed() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.gethdgAddARAccountModalTitle());
+		Assert.assertEquals(ar.gethdgAddARAccountModalTitle().getText(), "Add AR Account");
+	}
+	
+	@Then("^I validate statement preference header is displayed$")
+	public void I_validate_statement_preference_header_is_displayed() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.gethdgARModStatementPreference());
+		Assert.assertEquals(ar.gethdgARModStatementPreference().getText(), "STATEMENT PREFERENCE");
+	}
+	
+	@Then("^I validate configuration menu option is not displayed$")
+	public void I_validate_configuration_menu_option_is_not_displayed() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementVisibility(ar.gettbarARMenu());
+		Assert.assertNotSame(ar.gettbarARMenu().getText(), "Configuration");
+	}
+	
+	@And("^I validate Rating Dropdown Credit Limit Cancel Limit Delivery Method drop down fields under company info$")
+	public void I_validate_Rating_Dropdown_Credit_Limit_Cancel_Limit_Delivery_Method_drop_down_field_under_company_info() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementClickable(ar.gettxtARModCreditLimit());
+		Assert.assertTrue(ar.gettxtARModCreditLimit().isEnabled());
+		waitForElementClickable(ar.getddnARModCreditRating());
+		Assert.assertTrue(ar.getddnARModCreditRating().isEnabled());
+		waitForElementClickable(ar.gettxtARModCancelLimit());
+		Assert.assertTrue(ar.gettxtARModCancelLimit().isEnabled());
+		waitForElementClickable(ar.getddnARModStatementPreference());
+		Assert.assertTrue(ar.getddnARModStatementPreference().isEnabled());
+	}
+	
+	@Then("^I validate Delivery Method drop down options email and print$")
+	public void I_validate_Delivery_Method_drop_down_options_email_and_print() throws Throwable {
+		AccountReceivable ar = new AccountReceivable();
+		waitForElementClickable(ar.getddnARModStatementPreference());
+		Assert.assertTrue(ar.getddnARModStatementPreference().isEnabled());
+		click(ar.getddnARModStatementPreference());
+		selectByValue(ar.getddnARModStatementPreference(), "PRINT");
+		//click(ar.getddnARModStatementPreference());
+		selectByValue(ar.getddnARModStatementPreference(), "EMAIL");
+	}
+	
+	
+	
+}

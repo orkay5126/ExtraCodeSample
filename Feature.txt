@@ -1,0 +1,18 @@
+#Author: Payal
+Feature: Accounting_Precondition_CashReservation_CheckedIn_001
+
+
+  @GuestFolio @Regression @Reservation
+  Scenario Outline: GuestFolio_Precondition_CashReservation_CheckedIn_002 - Scenario 1: Create reservation with Cash guarantee method and Checked In
+    Given I am in dashboard for the property "<PropertyList>"
+    When I create Reservation with cash guarantee method "<Availability>"
+    When I click on CheckIn button On the GSR
+    Then I validate CheckIn modal display
+    When I select Payment Method "<GuestStayRecord>" from dropdown on CheckIn Modal
+    And I click Apply button
+    And I click on the complete check in button
+    Then I validate Guest Stay Record page display
+
+    Examples: 
+      | PropertyList | Availability | GuestStayRecord |
+      |            2 |           97 |               3 |

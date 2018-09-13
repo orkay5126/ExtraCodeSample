@@ -1,0 +1,165 @@
+package com.stepdefinition;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+
+import org.joda.time.LocalDateTime;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test; 
+
+import com.ObjectRepository.PMSNavigationMenu;
+import com.resources.FunctionalLibrary;
+import com.resources.ReadDatafromExcel;
+
+import cucumber.api.CucumberOptions;
+import cucumber.api.Scenario;
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
+import cucumber.api.testng.TestNGCucumberRunner;
+
+import com.resources.ExtentCucumberFormatter;
+import com.stepdefinition.CommonSteps;
+
+
+@CucumberOptions(features = { "src/test/resources/com/testFramework/"} , tags={"~@OutOfScope"}, plugin = {
+		"com.resources.ExtentCucumberFormatter:","json:src/Cucumber.json"})
+
+
+/*@CucumberOptions(features = { 
+"src/test/resources/com/Availability", "src/test/resources/com/GuestFolio",
+"src/test/resources/com/GuestBoard","src/test/resources/com/CopyReservation","src/test/resources/com/WakeUpCall","src/test/resources/com/BankPostPayment"}, tags={"~@OutOfScope"}, plugin = {
+"com.resources.ExtentCucumberFormatter:","json:src/Cucumber.json"})*/
+
+/*@CucumberOptions(features = { "src/test/resources/com/ConfigurationFinancial", "src/test/resources/com/ConfigurationInterfaces","src/test/resources/com/ConfigurationPropertyDefaultsReservation","src/test/resources/com/ConfigurationPropertySetupBuildings","src/test/resources/com/ConfigurationPropertySetupBusinessDate","src/test/resources/com/ConfigurationPropertySetupOOO","src/test/resources/com/ConfigurationRoomsRoomUnits","src/test/resources/com/ConfigurationTransactionCodeBase","src/test/resources/com/NightAudit","src/test/resources/com/WakeUpCall","src/test/resources/com/UI","src/test/resources/com/ConfigurationAccountsReceivable","src/test/resources/com/ConfigurationCashiers"} , tags={"~@OutOfScope"}, plugin = {
+		"com.resources.ExtentCucumberFormatter:","json:src/Cucumber.json"})
+
+@CucumberOptions(features = { "src/test/resources/com/ConfigurationFinancial"} , tags={"~@OutOfScope"}, plugin = {
+		"com.resources.ExtentCucumberFormatter:","json:src/Cucumber.json"})
+
+
+@CucumberOptions(features = { "src/test/resources/com/BankPostPayment/","src/test/resources/com/BankPostPayment/" }, tags={"~@OutOfScope"}, plugin = {
+"com.resources.ExtentCucumberFormatter:","json:src/Cucumber.json"})*/
+
+
+/*CucumberOptions(features = { "src/test/resources/com/Accounting/","src/test/resources/com/Availability/","src/test/resources/com/CopyReservation/","src/test/resources/com/GuestFolio/","src/test/resources/com/GuestBoard/","src/test/resources/com/HouseKeeping/","src/test/resources/com/MSR/"}, tags={"~@OutOfScope"}, plugin = {
+"com.resources.ExtentCucumberFormatter:","json:src/Cucumber.json"})*/
+
+/*@CucumberOptions(features = { "src/test/resources/com/ConfigurationFinancial","src/test/resources/com/ConfigurationPropertyDefaultsReservation","src/test/resources/com/ConfigurationPropertySetupBuildings","src/test/resources/com/ConfigurationRoomsRoomUnits","src/test/resources/com/ConfigurationTransactionCodeBase","src/test/resources/com/WakeUpCall"} , tags={"~@OutOfScope"}, plugin = {
+		"com.resources.ExtentCucumberFormatter:","json:src/Cucumber.json"})*/
+		
+public class TestRunner1 {
+
+	public static String TestDataLocation = "src/test/resources/testdata/Examples.xlsx";
+
+	public static void main(String args[]) throws Throwable {
+		String features = "";
+		for (int i = 0; i < args.length; i++) {
+			System.out.println(args[i]);
+			features = features + args[i];
+			features = features + " ";
+		}
+
+		System.setProperty("cucumber.options", features);
+
+		TestRunner1 commandLineRunner = new TestRunner1();
+		commandLineRunner.beforeClass();
+		commandLineRunner.runCukes();
+		commandLineRunner.endReportsAndQuitBrowser();
+	}
+
+	@Test
+	public void runCukes() {
+		new TestNGCucumberRunner(getClass()).runCukes();
+	}
+
+	@Before
+	public void beforeScenario(Scenario scenario) {
+		
+		//Commenting the below code since browser will be launched only once
+		/*
+		 * List<HashMap<String, String>> configDetails = ReadDatafromExcel.data(TestDataLocation, "Configuration");
+		String browser = configDetails.get(1).get("Browser");
+		String url = configDetails.get(1).get("URL");
+		FunctionalLibrary.driverInit(browser);
+		FunctionalLibrary.driver.get(url);
+		FunctionalLibrary.jsWaitForPageLoad();
+		*/
+	}
+
+	@After
+	public void afterScenario(Scenario scenario) throws Exception {
+		//PMSNavigationMenu menu = new PMSNavigationMenu();
+		//Commenting the below code since browser will be launched only once
+	    //menu.logoutPMS();
+		//FunctionalLibrary.closeBrowser();
+
+	}
+
+	@BeforeClass
+	public void beforeClass() throws Throwable {
+		System.out.println("In before class");
+		LocalDateTime now = LocalDateTime.now();
+		int year = now.getYear();
+		int month = now.getMonthOfYear();
+		int day = now.getDayOfMonth();
+		int hour = now.getHourOfDay();
+		int minute = now.getMinuteOfHour();
+		int second = now.getSecondOfMinute();
+		String snewFilename1 = year + "_" + month + "_" + day + "_" + hour + "_" + minute + "_" + second;
+		String filePath = System.getProperty("user.dir") + "\\src\\test\\resources\\AutomationSuite\\Report_"
+				+ snewFilename1 + ".html";
+		File file = new File(filePath);
+		ExtentCucumberFormatter.setExtentHtmlReport(file);
+		
+		List<HashMap<String, String>> envDetails = ReadDatafromExcel.data(TestDataLocation, "Configuration_QA");
+		String env = envDetails.get(1).get("Environment");
+		List<HashMap<String, String>> configDetails;
+		String url;
+		String browser;
+		
+		switch(env.toLowerCase())
+		{
+		case "qa":
+		configDetails = ReadDatafromExcel.data(TestDataLocation, "Configuration_QA");
+		 browser = configDetails.get(1).get("Browser");
+		 url = configDetails.get(1).get("URL");
+		FunctionalLibrary.driverInit(browser);
+		FunctionalLibrary.driver.get(url);
+		FunctionalLibrary.jsWaitForPageLoad();
+		break;
+
+		case "cert":
+			configDetails = ReadDatafromExcel.data(TestDataLocation, "Configuration_Cert");
+			 browser = configDetails.get(1).get("Browser");
+			 url = configDetails.get(1).get("URL");
+			FunctionalLibrary.driverInit(browser);
+			FunctionalLibrary.driver.get(url);
+			FunctionalLibrary.jsWaitForPageLoad();
+			break;
+			
+		case "reg":
+			configDetails = ReadDatafromExcel.data(TestDataLocation, "Configuration_Reg");
+			 browser = configDetails.get(1).get("Browser");
+			 url = configDetails.get(1).get("URL");
+			FunctionalLibrary.driverInit(browser);
+			FunctionalLibrary.driver.get(url);
+			FunctionalLibrary.jsWaitForPageLoad();
+			break;
+
+		
+		}
+		// extentProperties.setExtentXServerUrl("http://localhost:1337");
+	}
+
+	@AfterClass
+	public void endReportsAndQuitBrowser() throws IOException {
+		FunctionalLibrary.quitBrowser();
+		System.out.println("Killing Chrome driver process");
+		 Runtime.getRuntime().exec("taskkill /F /IM ChromeDriver.exe");
+		
+	}
+
+}
