@@ -1,4 +1,57 @@
-New Changes
+	System.setProperty("webdriver.chrome.driver", "C:\\chromedriver.exe");
+		WebDriver driver = new ChromeDriver();
+		
+		driver.manage().timeouts().pageLoadTimeout(45, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(45, TimeUnit.SECONDS);
+		driver.manage().window().maximize();
+		driver.manage().deleteAllCookies();
+		
+//		driver.get("XXXXXXXXXXXXXXx");
+//		System.out.println(driver.getTitle());
+//		System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXx");
+		
+//********************Alert Handling***************************		
+//		driver.get("https://mail.rediff.com/cgi-bin/login.cgi");
+//		System.out.println(driver.getTitle());
+//		driver.findElement(By.name("proceed")).click();
+//		Alert alert = driver.switchTo().alert();
+//		System.out.println(alert.getText());
+//		alert.accept();
+//********************Alert Handling***************************
+		
+		
+				
+//****************************Broken links********************************************************		
+//		
+//		List <WebElement> allLinks = driver.findElements(By.tagName("a"));
+//		allLinks.addAll(driver.findElements(By.tagName("img")));
+//		
+//		System.out.println("Number of links present" +allLinks.size());
+//		
+//		List <WebElement> activeLinks = new ArrayList<WebElement>();
+//		for (int i=0; i<allLinks.size();i ++) {
+//			if ((allLinks.get(i).getAttribute("href"))!= null && !(allLinks.get(i).getAttribute("href").contains("tel:")))
+////				System.out.println(allLinks.get(i).getAttribute("href"));
+//				activeLinks.add(allLinks.get(i));
+//		}
+//		System.out.println("Active Links : " + activeLinks.size());
+//		
+//		for(int j=0;j<activeLinks.size();j++){
+//			HttpURLConnection connection = (HttpURLConnection) new URL(activeLinks.get(j).getAttribute("href")).openConnection();
+//		try {
+//			connection.connect();
+//			String response = connection.getResponseMessage();
+//			System.out.println(activeLinks.get(j).getAttribute("href")  + "---->"  + response);
+//			connection.disconnect();
+//						
+//		} catch (MalformedURLException e) {
+//			System.out.println(activeLinks.get(j).getAttribute("href")  + "---->"  + "Broken");
+//		} 
+//		}
+
+
+
+
 XPath
 +How to Find XPath in Chrome browser for Selenium Webdriver 
 +Learn how to verify Custom XPath in Chrome Browser 
