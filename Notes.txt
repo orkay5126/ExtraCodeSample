@@ -1,3 +1,4 @@
+New Changes
 XPath
 +How to Find XPath in Chrome browser for Selenium Webdriver 
 +Learn how to verify Custom XPath in Chrome Browser 
@@ -22,8 +23,8 @@ Name
 ClassName
 Linktext
 Xpath
-//TagName[@attribute = ëValueí]
-//input[@id=îusernameî]
+//TagName[@attribute = ‚ÄòValue‚Äô]
+//input[@id=‚Äùusername‚Äù]
 
 CSSelector
 
@@ -49,10 +50,10 @@ tagName[attribute='value']  -CSS  tagName#id- CSS   tagname.classname- CSS
 //tagName[ends-with(@attribute,'value')]  - xpath regular expression
 
 tagName[Atrribute*='value'] - Css regular expression
-Parent Child relation ship xpath ñ Define xpath parent/tagnames
-Traversing from sibling to sibling ñ following-sibling::tagname[count]
+Parent Child relation ship xpath ‚Äì Define xpath parent/tagnames
+Traversing from sibling to sibling ‚Äì following-sibling::tagname[count]
 Traversing from child to parent ? //tagName[@attribute='value']/parent::tagname  
-Least option ñ based on the visible test - //*[text()='Images']
+Least option ‚Äì based on the visible test - //*[text()='Images']
 
 
 
@@ -61,7 +62,7 @@ Use # to comment a line in a config.properties file.
 
 What is the difference between Relative and absolute xpath?
 Relative- Doesnot depend on parent nodes 
-Parent/child- Absolute xpath ñ
+Parent/child- Absolute xpath ‚Äì
 
  How to traverse to sibling element using xpath?
 .//*[@id='tablist1-tab1']/following-sibling::li[2]
@@ -81,7 +82,7 @@ HtmlUnitDriver is not part of selenium and need to download and add to the exter
 
 
 Difference between isDisplayed(), isEnabled() and isSelected() Methods in Selenium WebDriver:
-1. isDisplayed() is the method used to verify the presence of a web element within the web page. The method returns a ìtrueî value if the specified web element is present on the web page and a ìfalseî value if the web element is not present on the webpage. 
+1. isDisplayed() is the method used to verify the presence of a web element within the web page. The method returns a ‚Äútrue‚Äù value if the specified web element is present on the web page and a ‚Äúfalse‚Äù value if the web element is not present on the webpage. 
 2. isDisplayed() is capable to check for the presence of all kinds of web elements available. 
 3. isEnabled() is the method used to verify if the web element is enabled or disabled within the web page. 
 4. isEnabled() is primarily used with buttons. 
@@ -104,40 +105,40 @@ git config user.name "insert github real name here"
 OR 
 Generate the SSH key
 
-8.	GIT commit ñm ìcommentsî
+8.	GIT commit ‚Äìm ‚Äúcomments‚Äù
 9.	$ git remote add origin https://github.com/orkay5126/NewDemo.git
-10.	GIT push ñu origin master
-To Clone (fresh copy) ñ Pull (sub sequent)
+10.	GIT push ‚Äìu origin master
+To Clone (fresh copy) ‚Äì Pull (sub sequent)
 1.	GIT clone <GIT url> <Where to clone>
 2.	git checkout -b testbranch1
 3.	GIT Status
 4.	<update your changes>
 5.	GIT add .
 6.	GIT Status
-7.	GIT commit ñm ìcommentsî
-8.	GIT push ñu origin <branchname>
+7.	GIT commit ‚Äìm ‚Äúcomments‚Äù
+8.	GIT push ‚Äìu origin <branchname>
 To Pull and Merge:
 1.	Git checkout master
 2.	GIT pull origin master
-3.	Git branch ñmerged
+3.	Git branch ‚Äìmerged
 4.	Git merge <branch name>
 5.	mvn clean install....to make sure that there is no build issues
 6.	Git push origin master
 Delete a branch:
-1.	Git branch ñd <branch name> //deleting from local repository
-2.	Git branch ña
-3.	Git push origin ñdelete <branch name>   //deleting from remote repository
+1.	Git branch ‚Äìd <branch name> //deleting from local repository
+2.	Git branch ‚Äìa
+3.	Git push origin ‚Äìdelete <branch name>   //deleting from remote repository
 Other commonds:
 GIT Log
 GIT reflog
 GIT Show
-GIT log ñh5
-GIT reset ñhp
-Git push ñh
+GIT log ‚Äìh5
+GIT reset ‚Äìhp
+Git push ‚Äìh
 Git <verb> --help
 Ls -la
 Gitk? Open the application in UI
-git remote ñv
+git remote ‚Äìv
 git branch -a
 git diff
 git rebase
@@ -172,11 +173,11 @@ https://docs.joyent.com/public-cloud/getting-started/ssh-keys/generating-an-ssh-
 https://www.ssh.com/ssh/keygen/#sec-SSH-Keys-and-Public-Key-Authentication
 https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
 
- To launch Safari browser, no need to use the ìSetPropertyî. Need to add an extension in Safari.
+ To launch Safari browser, no need to use the ‚ÄúSetProperty‚Äù. Need to add an extension in Safari.
 1.	Goto Preferences?Extensions and add the Safari Extension for Selenium
-2.	Goto Preferences?Advanced settings?check ìShow Develop in menu bar î ?Click on Develop Tab?Check ìAllow Remote Automationî
+2.	Goto Preferences?Advanced settings?check ‚ÄúShow Develop in menu bar ‚Äù ?Click on Develop Tab?Check ‚ÄúAllow Remote Automation‚Äù
 How to launch Safari Browser with Selenium: Steps: 
-1 ñ Set Up WebDriver Extension for Safari browser 
+1 ‚Äì Set Up WebDriver Extension for Safari browser 
 2 -- Install the Safari Browser Extension 
 3 -- Restart your Safari Browser 
 4 -- Enable "Allow Remote Automation" option from Develop tab 
@@ -206,8 +207,8 @@ List <WebElement> links = driver.findElements(By.tagName("a")));
 
 
 What is HTML DOM - Document Object Model? Why we get StaleElement Exception in Selenium.
-ï DOM is an API Interface provided by browser 
-ï When a web page is loaded, browser creates a DOM of the page. 
+‚Ä¢ DOM is an API Interface provided by browser 
+‚Ä¢ When a web page is loaded, browser creates a DOM of the page. 
 
 What are the different Exceptions in Selenium: 
 a. StaleElement Exception 
@@ -215,13 +216,13 @@ b. ElementNotFound Exception
 c. NoElementReference Exception
 
 With the document object model, JavaScript gets all the power it needs to create dynamic HTML:
-ï JavaScript can change all the HTML elements in the page 
-ï JavaScript can change all the HTML attributes in the page 
-ï JavaScript can change all the CSS styles in the page 
-ï JavaScript can remove existing HTML elements and attributes 
-ï JavaScript can add new HTML elements and attributes 
-ï JavaScript can react to all existing HTML events in the page 
-ï JavaScript can create new HTML events in the page
+‚Ä¢ JavaScript can change all the HTML elements in the page 
+‚Ä¢ JavaScript can change all the HTML attributes in the page 
+‚Ä¢ JavaScript can change all the CSS styles in the page 
+‚Ä¢ JavaScript can remove existing HTML elements and attributes 
+‚Ä¢ JavaScript can add new HTML elements and attributes 
+‚Ä¢ JavaScript can react to all existing HTML events in the page 
+‚Ä¢ JavaScript can create new HTML events in the page
 
 
 Jenkins :
@@ -229,7 +230,7 @@ Install Jenkins
 https://www.tutorialspoint.com/jenkins/jenkins_maven_setup.htm
 
 Open the command prompt. From the command prompt, browse to the directory where the jenkins.war file is present. 
-D:\>Java ñjar Jenkins.war
+D:\>Java ‚Äìjar Jenkins.war
 
 http://localhost:8080
 
@@ -368,21 +369,21 @@ Oracle Virtual Box/Vagrant:
 https://drupalize.me/videos/installing-vagrant-and-virtualbox?p=1526
 
 VI commands:
-:q! ñ Quit without saving
-:q ñ Quit
+:q! ‚Äì Quit without saving
+:q ‚Äì Quit
 :w - save
-:wq ñ Save and Quit
-DD ñ to cut the line(For multiple lines, <# of lines>DD)
-DW ñ To cut the word
-YY ñ To copy the line(For multiple lines, <# of lines>YY)
+:wq ‚Äì Save and Quit
+DD ‚Äì to cut the line(For multiple lines, <# of lines>DD)
+DW ‚Äì To cut the word
+YY ‚Äì To copy the line(For multiple lines, <# of lines>YY)
 YW - To copy the word
-P ñ Paste
+P ‚Äì Paste
 GREP
-/<Search Item> - to search; n -search forward; N ñ search backwards
-r ñ Replace the character one at a time
-R ñ replace the char until Esc hit
-u ñ Undi
+/<Search Item> - to search; n -search forward; N ‚Äì search backwards
+r ‚Äì Replace the character one at a time
+R ‚Äì replace the char until Esc hit
+u ‚Äì Undi
 Ctl + R  - Redo
-X ñ Delete right char; x ñ delete left char
+X ‚Äì Delete right char; x ‚Äì delete left char
 H ?; L?; J- Down;K-UP;
 
